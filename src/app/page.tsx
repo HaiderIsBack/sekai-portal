@@ -1,7 +1,17 @@
+"use client";
+
 import Button from "@/components/Button";
 import SeminarCard from "@/components/SeminarCard";
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import { Noto_Color_Emoji } from "next/font/google";
+import { supabase } from "@/lib/supabaseClient";
+
+const notoColorEmoji = Noto_Color_Emoji({
+  subsets: [],
+  weight: ["400"],
+});
 
 const Pill = ({ children }: any) => {
   return (
@@ -10,14 +20,24 @@ const Pill = ({ children }: any) => {
 }
 
 export default function Home() {
+  const [seminars, setSeminars] = useState([]);
+
+  useEffect(() => {
+    const fetchSeminars = async () => {
+      const { data, error } = await supabase.from("seminars").select("*");
+
+      console.log(data);
+    }
+    fetchSeminars();
+  }, []);
   return (
     <main>
       <section className="max-w-[1500px] mx-auto w-full flex flex-col justify-center items-center gap-4 py-[60px] px-[20px]">
-        <h2 className="text-[32px] font-bold mt-[26px]">🌏Let's move the world</h2>
-        <p className="text-[18px]">Connect with new customers by speaking at and co-hosting overseas seminars</p>
-        <div className="flex items-center gap-4 my-3">
-          <Button type='primary' href='#'>Find a Seminar</Button>
-          <Button type='secondary' href='#'>Consult</Button>
+        <h2 className="text-[20px] md:text-[32px] sm:text-[24px] font-bold mt-[26px]"><span className={notoColorEmoji.className}>🌏</span>Let's move the world</h2>
+        <p className="text-[18px] text-center">Connect with new customers by speaking at and co-hosting overseas seminars</p>
+        <div className="flex items-center flex-col sm:flex-row gap-4 my-3">
+          <Button type='primary' href='#' className="w-full flex-1 sm:flex-auto sm:w-auto">Find a Seminar</Button>
+          <Button type='secondary' href='#' className="w-full flex-1 sm:flex-auto sm:w-auto">Consult</Button>
         </div>
         <div className="max-w-[100%] flex justify-center gap-4 flex-wrap">
           <Pill>Standing on the world stage</Pill>
@@ -53,7 +73,7 @@ export default function Home() {
           <SeminarCard />
           <SeminarCard />
         </div>
-        <Link href={'#'} className="block mt-4 text-right text-[18px] text-[var(--primary)] font-bold hover:underline">See all Seminars →</Link>
+        <Link href={'/seminars'} className="block mt-4 text-right text-[18px] text-[var(--primary)] font-bold hover:underline">See all Seminars →</Link>
       </section>
 
       <section className="max-w-[1500px] mx-auto py-[40px] px-[20px]">

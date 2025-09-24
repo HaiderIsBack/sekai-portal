@@ -10,7 +10,7 @@ const Header = () => {
             <h1 className="font-[Helvetica, Ariel] text-[20px] font-bold">Sekai Portal</h1>
             <menu>
                 {links.map((link) => {
-                    return (<a key={link.href} href={link.href} className="ml-[20px] text-[16px]">{link.name}</a>);
+                    return (<a key={link.href} href={link.href} className="ml-[20px] text-[16px] hover:text-[var(--primary)]">{link.name}</a>);
                 })}
             </menu>
         </header>
