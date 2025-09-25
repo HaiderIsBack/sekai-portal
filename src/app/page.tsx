@@ -8,6 +8,9 @@ import { useState, useEffect } from "react";
 import { Noto_Color_Emoji } from "next/font/google";
 import { supabase } from "@/lib/supabaseClient";
 
+import { Seminar } from "../types/Seminar";
+import SeminarDetailsModal from "@/components/SeminarDetailsModal";
+
 const notoColorEmoji = Noto_Color_Emoji({
   subsets: [],
   weight: ["400"],
@@ -20,18 +23,38 @@ const Pill = ({ children }: any) => {
 }
 
 export default function Home() {
-  const [seminars, setSeminars] = useState([]);
+  const [seminars, setSeminars] = useState<Seminar[]>([]);
+  const [seminarModalVisible, setSeminarModalVisible] = useState<boolean>(false);
+  const [selectedSeminar, setSelectedSeminar] = useState<Seminar | null>(null);
 
   useEffect(() => {
     const fetchSeminars = async () => {
-      const { data, error } = await supabase.from("seminars").select("*");
+      const { data, error }: any = await supabase.from("seminars")
+        .select('id, title, country, city, date, participants, category, event_type, flag, image_name, created_at')
+        .order('created_at', { ascending: false })
+        .limit(3);
 
-      console.log(data);
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      if (data && !error) {
+        setSeminars(data);
+      }
     }
     fetchSeminars();
+    console.log("init");
   }, []);
+
+  const handleSeminarSelection = (seminar: Seminar) => {
+    setSelectedSeminar(seminar);
+    setSeminarModalVisible(true);
+  }
   return (
     <main>
+      {selectedSeminar && seminarModalVisible && <SeminarDetailsModal visible={seminarModalVisible} setIsVisible={setSeminarModalVisible} selectedSeminar={selectedSeminar} />}
+
       <section className="max-w-[1500px] mx-auto w-full flex flex-col justify-center items-center gap-4 py-[60px] px-[20px]">
         <h2 className="text-[20px] md:text-[32px] sm:text-[24px] font-bold mt-[26px]"><span className={notoColorEmoji.className}>🌏</span>Let's move the world</h2>
         <p className="text-[18px] text-center">Connect with new customers by speaking at and co-hosting overseas seminars</p>
@@ -69,9 +92,11 @@ export default function Home() {
       <section className="max-w-[1500px] mx-auto py-[40px] px-[20px]">
         <h2 className="text-2xl mt-[24px] mb-[20px] font-bold">Recent Seminars</h2>
         <div className="grid grid-cols-3 gap-[20px]">
-          <SeminarCard />
-          <SeminarCard />
-          <SeminarCard />
+          {
+            seminars && (
+              seminars.map(seminar => <SeminarCard key={seminar.id} seminar={seminar} handleSeminarSelection={handleSeminarSelection} />)
+            )
+          }
         </div>
         <Link href={'/seminars'} className="block mt-4 text-right text-[18px] text-[var(--primary)] font-bold hover:underline">See all Seminars →</Link>
       </section>
