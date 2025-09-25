@@ -1,15 +1,16 @@
 "use client";
 
 import Button from "@/components/Button";
-import SeminarCard from "@/components/SeminarCard";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Noto_Color_Emoji } from "next/font/google";
-import { supabase } from "@/lib/supabaseClient";
 
 import { Seminar } from "../types/Seminar";
 import SeminarDetailsModal from "@/components/SeminarDetailsModal";
+
+import FeaturedSeminarCards from "@/components/FeaturedSeminarCards";
+import InquiryModal from "@/components/InquiryModal";
 
 const notoColorEmoji = Noto_Color_Emoji({
   subsets: [],
@@ -18,134 +19,114 @@ const notoColorEmoji = Noto_Color_Emoji({
 
 const Pill = ({ children }: any) => {
   return (
-    <span className="py-[10px] px-[20px] bg-[#f9f9f9] border-[1px] border-[#ddd] text-[16px] rounded-[30px]">{children}</span>
+    <span className="py-[10px] sm:py-[10px] px-4 sm:px-[20px] bg-[#f9f9f9] border-[1px] border-[#ddd] text-[12px] sm:text-[16px] rounded-[30px]">{children}</span>
   );
 }
 
 export default function Home() {
-  const [seminars, setSeminars] = useState<Seminar[]>([]);
   const [seminarModalVisible, setSeminarModalVisible] = useState<boolean>(false);
+  const [inquiryModalVisible, setInquiryModalVisible] = useState<boolean>(false);
   const [selectedSeminar, setSelectedSeminar] = useState<Seminar | null>(null);
-
-  useEffect(() => {
-    const fetchSeminars = async () => {
-      const { data, error }: any = await supabase.from("seminars")
-        .select('id, title, country, city, date, participants, category, event_type, flag, image_name, created_at')
-        .order('created_at', { ascending: false })
-        .limit(3);
-
-      if (error) {
-        alert(error.message);
-        return;
-      }
-
-      if (data && !error) {
-        setSeminars(data);
-      }
-    }
-    fetchSeminars();
-    console.log("init");
-  }, []);
 
   const handleSeminarSelection = (seminar: Seminar) => {
     setSelectedSeminar(seminar);
     setSeminarModalVisible(true);
   }
+
+  const handleSingleInquirySelection = () => {
+    setSeminarModalVisible(false);
+    setInquiryModalVisible(true);
+  }
   return (
     <main>
-      {selectedSeminar && seminarModalVisible && <SeminarDetailsModal visible={seminarModalVisible} setIsVisible={setSeminarModalVisible} selectedSeminar={selectedSeminar} />}
+      {selectedSeminar && seminarModalVisible && <SeminarDetailsModal setIsVisible={setSeminarModalVisible} selectedSeminar={selectedSeminar} handleSingleInquirySelection={handleSingleInquirySelection} />}
+      {selectedSeminar && inquiryModalVisible && <InquiryModal setIsVisible={setInquiryModalVisible} selectedSeminar={selectedSeminar} />}
 
       <section className="max-w-[1500px] mx-auto w-full flex flex-col justify-center items-center gap-4 py-[60px] px-[20px]">
-        <h2 className="text-[20px] md:text-[32px] sm:text-[24px] font-bold mt-[26px]"><span className={notoColorEmoji.className}>🌏</span>Let's move the world</h2>
-        <p className="text-[18px] text-center">Connect with new customers by speaking at and co-hosting overseas seminars</p>
-        <div className="flex items-center flex-col sm:flex-row gap-4 my-3">
-          <Button type='primary' href='#' className="w-full flex-1 sm:flex-auto sm:w-auto">Find a Seminar</Button>
-          <Button type='secondary' href='#' className="w-full flex-1 sm:flex-auto sm:w-auto">Consult</Button>
+        <h2 className="text-[20px] md:text-[32px] sm:text-[24px] font-bold mt-[26px]"><span className={notoColorEmoji.className}>🌏</span>世界を動かそう</h2>
+        <p className="text-[16px] sm:text-[18px] text-center">海外セミナーで登壇・共催し、新しい顧客とつながろう</p>
+        <div className="w-full sm:w-fit flex items-center flex-col sm:flex-row gap-4 my-3">
+          <Button type='primary' href='#' className="w-full flex-1 sm:flex-auto sm:w-fit text-center sm:text-left">セミナーを探す</Button>
+          <Button type='secondary' href='#' className="w-full flex-1 sm:flex-auto sm:w-fit text-center sm:text-left">相談する</Button>
         </div>
-        <div className="max-w-[100%] flex justify-center gap-4 flex-wrap">
-          <Pill>Standing on the world stage</Pill>
-          <Pill>Meet your ideal clients</Pill>
-          <Pill>Strengthening influence</Pill>
-          <Pill>Find investors and business partners</Pill>
-          <Pill>Promoting Japan's No. 1 initiative</Pill>
-        </div>
-      </section>
-
-      <section className="max-w-[1500px] mx-auto py-[40px] px-[20px]">
-        <h2 className="text-2xl mt-[24px] mb-[20px] font-bold">How to use</h2>
-        <div className="grid grid-cols-3 gap-[20px]">
-          <div className="p-3 rounded-[8px] border-[1px] border-[#eee] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
-            <h3 className="text-[18px] font-bold text-[var(--primary)] hover:text-[var(--secondary)] duration-150 cursor-pointer">Step 1: Find a Seminar</h3>
-            <p className="text-[16px] py-4">Choose from events around the world</p>
-          </div>
-          <div className="p-3 rounded-[8px] border-[1px] border-[#eee] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
-            <h3 className="text-[18px] font-bold text-[var(--primary)] hover:text-[var(--secondary)] duration-150 cursor-pointer">Step 2: Talk to a calling expert</h3>
-            <p className="text-[16px] py-4">Apply by sharing your profile and thoughts</p>
-          </div>
-          <div className="p-3 rounded-[8px] border-[1px] border-[#eee] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
-            <h3 className="text-[18px] font-bold text-[var(--primary)] hover:text-[var(--secondary)] duration-150 cursor-pointer">Step 3: Go global</h3>
-            <p className="text-[16px] py-4">Gain new customers and networks</p>
-          </div>
+        <div className="max-w-[100%] flex justify-center gap-2 sm:gap-4 flex-wrap">
+          <Pill>世界の舞台に立つ</Pill>
+          <Pill>理想のクライアントと出会う</Pill>
+          <Pill>影響力を強化する</Pill>
+          <Pill>投資家、ビジネスパートナーを見つける</Pill>
+          <Pill>日本いちの取り組み発信する</Pill>
         </div>
       </section>
 
       <section className="max-w-[1500px] mx-auto py-[40px] px-[20px]">
-        <h2 className="text-2xl mt-[24px] mb-[20px] font-bold">Recent Seminars</h2>
-        <div className="grid grid-cols-3 gap-[20px]">
-          {
-            seminars && (
-              seminars.map(seminar => <SeminarCard key={seminar.id} seminar={seminar} handleSeminarSelection={handleSeminarSelection} />)
-            )
-          }
+        <h2 className="text-2xl mt-[24px] mb-[20px] font-bold">使い方</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px]">
+          <div className="p-3 rounded-[8px] border-[1px] border-[#eee] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+            <h3 className="text-[18px] font-bold text-[var(--primary)] hover:text-[var(--secondary)] duration-150 cursor-pointer">ステップ 1: セミナーを探す</h3>
+            <p className="text-[16px] py-4">世界中のイベントから自分に合ったものを選択</p>
+          </div>
+          <div className="p-3 rounded-[8px] border-[1px] border-[#eee] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+            <h3 className="text-[18px] font-bold text-[var(--primary)] hover:text-[var(--secondary)] duration-150 cursor-pointer">ステップ 2: 発信エキスパートに相談する</h3>
+            <p className="text-[16px] py-4">プロフィールと想いを共有して申し込み</p>
+          </div>
+          <div className="p-3 rounded-[8px] border-[1px] border-[#eee] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+            <h3 className="text-[18px] font-bold text-[var(--primary)] hover:text-[var(--secondary)] duration-150 cursor-pointer">ステップ 3: 世界に広がる</h3>
+            <p className="text-[16px] py-4">新しい顧客やネットワークを獲得</p>
+          </div>
         </div>
-        <Link href={'/seminars'} className="block mt-4 text-right text-[18px] text-[var(--primary)] font-bold hover:underline">See all Seminars →</Link>
       </section>
 
       <section className="max-w-[1500px] mx-auto py-[40px] px-[20px]">
-        <h2 className="text-2xl mt-[24px] mb-[20px] font-bold">Participant Comments</h2>
+        <h2 className="text-2xl mt-[24px] mb-[20px] font-bold">直近のセミナー</h2>
+        <FeaturedSeminarCards handleSeminarSelection={handleSeminarSelection} />
+        <Link href={'/seminars'} className="block mt-4 text-right text-[18px] text-[var(--primary)] font-bold hover:underline">すべてのセミナーを見る →</Link>
+      </section>
+
+      <section className="max-w-[1500px] mx-auto py-[40px] px-[20px]">
+        <h2 className="text-2xl mt-[24px] mb-[20px] font-bold">参加者の声</h2>
         <div className="flex flex-col gap-3 bg-[#f9f9f9] p-[15px] rounded-[8px] mb-4">
           <span className="text-[#fbbf24]">★★★★★</span>
-          <p className="text-[16px]">It was an opportunity to connect with overseas clients.</p>
+          <p className="text-[16px]">海外クライアントにつながるきっかけになりました</p>
         </div>
         <div className="flex flex-col gap-3 bg-[#f9f9f9] p-[15px] rounded-[8px]">
           <span className="text-[#fbbf24]">★★★★★</span>
-          <p className="text-[16px]">It was an opportunity to connect with overseas clients.</p>
+          <p className="text-[16px]">初めての海外登壇で大きな自信になりました</p>
         </div>
       </section>
 
       <section className="max-w-[1500px] mx-auto py-[40px] px-[20px]">
-        <h2 className="text-2xl mt-[24px] mb-[20px] font-bold">Case studies</h2>
-        <div className="grid grid-cols-2 gap-[20px]">
+        <h2 className="text-2xl mt-[24px] mb-[20px] font-bold">事例</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[20px]">
           <div className="rounded-[8px] overflow-hidden border-[1px] border-[#eee] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
-            <Image src={"/images/hr_seminar.jpg"} alt="HR Seminar" className="w-full h-[160px] object-cover" width={910} height={670} />
+            <Image src={"/images/hr_seminar.jpg"} alt="米国人事セミナー" className="w-full h-[160px] object-cover" width={910} height={670} />
             <div className="p-3 mt-2">
-              <h3 className="text-[18px] font-bold text-[var(--primary)] hover:text-[var(--secondary)] duration-150 cursor-pointer">American human resources seminar</h3>
-              <p className="text-[16px] py-4">Gain new customers and networks</p>
+              <h3 className="text-[18px] font-bold text-[var(--primary)] hover:text-[var(--secondary)] duration-150 cursor-pointer">米国の人事系セミナー</h3>
+              <p className="text-[16px] py-4">セッション後に契約を獲得</p>
             </div>
           </div>
           <div className="rounded-[8px] overflow-hidden border-[1px] border-[#eee] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
             <Image src={"/images/europe_speaking.jpg"} alt="Europe Speaking" className="w-full h-[160px] object-cover" width={910} height={670} />
             <div className="p-3 mt-2">
-              <h3 className="text-[18px] font-bold text-[var(--primary)] hover:text-[var(--secondary)] duration-150 cursor-pointer">American human resources seminar</h3>
-              <p className="text-[16px] py-4">Gain new customers and networks</p>
+              <h3 className="text-[18px] font-bold text-[var(--primary)] hover:text-[var(--secondary)] duration-150 cursor-pointer">ヨーロッパで登壇</h3>
+              <p className="text-[16px] py-4">複数のパートナー企業と提携</p>
             </div>
           </div>
         </div>
       </section>
 
       <section className="max-w-[1500px] mx-auto py-[40px] px-[20px]">
-        <h2 className="text-2xl mt-[24px] mb-[20px] font-bold">FAQ</h2>
+        <h2 className="text-2xl mt-[24px] mb-[20px] font-bold">よくある質問</h2>
         <div className="mb-4">
-          <h3 className="text-[16px] font-bold mb-[5px]">Q. Can I participate even if I don't speak English?</h3>
-          <p className="text-[16px]">A. Don't worry, we have interpretation support available.</p>
+          <h3 className="text-[16px] font-bold mb-[5px]">Q. 英語が話せなくても参加できますか？</h3>
+          <p className="text-[16px]">A. 通訳サポートがありますのでご安心ください。</p>
         </div>
         <div className="mb-4">
-          <h3 className="text-[16px] font-bold mb-[5px]">Q. Can I participate even if I don't speak English?</h3>
-          <p className="text-[16px]">A. Don't worry, we have interpretation support available.</p>
+          <h3 className="text-[16px] font-bold mb-[5px]">Q. 初めてでも登壇できますか？</h3>
+          <p className="text-[16px]">A. はい、準備から現地サポートまでご案内します。</p>
         </div>
         <div className="mb-4">
-          <h3 className="text-[16px] font-bold mb-[5px]">Q. Can I participate even if I don't speak English?</h3>
-          <p className="text-[16px]">A. Don't worry, we have interpretation support available.</p>
+          <h3 className="text-[16px] font-bold mb-[5px]">Q. 渡航や宿泊のサポートはありますか？</h3>
+          <p className="text-[16px]">A. 専任スタッフがホテル・移動・現地案内をサポートします。</p>
         </div>
       </section>
     </main>
