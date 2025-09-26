@@ -11,7 +11,7 @@ type AppContextType = {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-export const AppProvider = ({ children }: any) => {
+export const AppProvider = ({ children }: {children: React.ReactNode}) => {
     const imageCounter = useRef<number>(0);
     const [availableImages, setAvailableImages] = useState<string[]>([]);
 

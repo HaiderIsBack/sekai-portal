@@ -6,6 +6,7 @@ import Image from "next/image";
 import Button from "./Button";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import { PostgrestSingleResponse } from "@supabase/supabase-js";
 
 const notoColorEmoji = Noto_Color_Emoji({
   subsets: [],
@@ -23,7 +24,7 @@ const SeminarDetailsModal = ({ setIsVisible, selectedSeminar, handleSingleInquir
 
     useEffect(() => {
         const fetchSeminarContent = async () => {
-            const { data: fullDetails, error }: any = await supabase
+            const { data, error } = await supabase
                 .from('seminars')
                 .select('seminar_details')
                 .eq('id', selectedSeminar.id)
@@ -34,8 +35,8 @@ const SeminarDetailsModal = ({ setIsVisible, selectedSeminar, handleSingleInquir
                     return;
                 }
 
-                if (fullDetails && !error) {
-                    setSeminarContent(fullDetails.seminar_details);
+                if (data && !error) {
+                    setSeminarContent(data.seminar_details);
                 }
             }
         fetchSeminarContent();
