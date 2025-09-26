@@ -102,7 +102,7 @@ const InquiryModal = ({ setIsVisible, selectedSeminars }: InquiryModalProps) => 
                 {
                     selectedSeminars && (
                         selectedSeminars.map(selectedSeminar => (
-                            <div className="flex justify-between items-center flex-nowrap text-[16px] py-4 px-[15px] bg-[#f9fafb] border-[1px] border-[#e5e7eb] rounded-[8px] my-2.5">
+                            <div key={selectedSeminar.id} className="flex justify-between items-center flex-nowrap text-[16px] py-4 px-[15px] bg-[#f9fafb] border-[1px] border-[#e5e7eb] rounded-[8px] my-2.5">
                                 <p>
                                     <span className={notoColorEmoji.className}>📌</span> <strong className="ml-1">{selectedSeminar.title}</strong> (<span className={notoColorEmoji.className}>{selectedSeminar.flag}</span> ${selectedSeminar.country}・${selectedSeminar.date})
                                 </p>
