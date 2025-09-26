@@ -40,7 +40,7 @@ export default function Home() {
   return (
     <main>
       {selectedSeminar && seminarModalVisible && <SeminarDetailsModal setIsVisible={setSeminarModalVisible} selectedSeminar={selectedSeminar} handleSingleInquirySelection={handleSingleInquirySelection} />}
-      {selectedSeminar && inquiryModalVisible && <InquiryModal setIsVisible={setInquiryModalVisible} selectedSeminar={selectedSeminar} />}
+      {selectedSeminar && inquiryModalVisible && <InquiryModal setIsVisible={setInquiryModalVisible} selectedSeminars={[selectedSeminar]} />}
 
       <section className="max-w-[1500px] mx-auto w-full flex flex-col justify-center items-center gap-4 py-[60px] px-[20px]">
         <h2 className="text-[20px] md:text-[32px] sm:text-[24px] font-bold mt-[26px]"><span className={notoColorEmoji.className}>🌏</span>世界を動かそう</h2>

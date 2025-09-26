@@ -4,6 +4,8 @@ import { Seminar } from "@/types/Seminar";
 import { Noto_Color_Emoji } from "next/font/google";
 import { FormEventHandler } from "react";
 
+import emailjs from "emailjs-com";
+
 const notoColorEmoji = Noto_Color_Emoji({
   subsets: [],
   weight: ["400"],
@@ -11,16 +13,20 @@ const notoColorEmoji = Noto_Color_Emoji({
 
 type InquiryModalProps = {
     setIsVisible: (inquiryModalVisible: boolean) => void;
-    selectedSeminar: Seminar;
+    selectedSeminars: Seminar[];
 }
 
-const InquiryModal = ({ setIsVisible, selectedSeminar }: InquiryModalProps) => {
+const InquiryModal = ({ setIsVisible, selectedSeminars }: InquiryModalProps) => {
 
     const handleFormSubmition: FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
 
         const formData = new FormData(e.target as HTMLFormElement);
         const data = Object.fromEntries(formData.entries());
+
+        const seminarListText = selectedSeminars.length > 0
+        ? selectedSeminars.map(s => `• ${s.title} (${s.flag} ${s.country}・${s.date})`).join('\n')
+        : '一般的なご相談';
 
         const adminEmailParams = {
             from_name: data.name,
@@ -32,9 +38,51 @@ const InquiryModal = ({ setIsVisible, selectedSeminar }: InquiryModalProps) => {
             interview_date_1: data.interview_date_1 || 'N/A',
             interview_date_2: data.interview_date_2 || 'N/A',
             interview_date_3: data.interview_date_3 || 'N/A',
-            // seminars: seminarListText,
+            seminars: seminarListText,
             reply_to: data.email
         };
+
+        const userEmailParams = {
+            to_name: data.name,
+            to_email: data.email,
+            company: data.company,
+            seminars: seminarListText,
+            reply_to: data.email
+        };
+
+        (function(){
+            emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_USER_ID ?? '');
+        })();
+
+        emailjs.send('default_service', process.env.NEXT_PUBLIC_EMAILJS_ADMIN_TEMPLATE_ID ?? '', adminEmailParams)
+        .then(() => {
+            console.log('Admin email sent successfully!');
+            // 2. Send auto-reply email to the user using the correct ID
+            const userTemplateId = process.env.NEXT_PUBLIC_EMAILJS_USER_TEMPLATE_ID ?? ''; // The correct ID from your screenshot
+            return emailjs.send('default_service', userTemplateId, userEmailParams);
+        })
+        .then(() => {
+            console.log('User auto-reply sent successfully!');
+            alert("Both emails have been sent successfully");
+            // showSuccessMessage(); // Show success only after both emails are handled
+        })
+        .catch((error) => {
+            console.error('Email sending failed:', error);
+            alert("Email not sent error occured");
+            // body.innerHTML = `
+            //     <div class="success-message">
+            //         <div style="font-size:48px; margin-bottom:20px;">❌</div>
+            //         <h3>送信に失敗しました</h3>
+            //         <p>
+            //             エラーが発生し、メッセージを送信できませんでした。時間をおいて再度お試しください。<br>
+            //             <small style="color: #666;">Error: ${error.text || 'An unknown error occurred.'}</small>
+            //         </p>
+            //         <div style="margin-top:30px;">
+            //             <button class="btn-secondary" onclick="closeInquiry()">閉じる</button>
+            //         </div>
+            //     </div>
+            // `;
+        });
     }
 
     return (
@@ -47,12 +95,18 @@ const InquiryModal = ({ setIsVisible, selectedSeminar }: InquiryModalProps) => {
             </div>
 
             <div className="p-3 my-2">
-                <div className="flex justify-between items-center flex-nowrap text-[16px] py-4 px-[15px] bg-[#f9fafb] border-[1px] border-[#e5e7eb] rounded-[8px] my-2.5">
-                    <p>
-                        <span className={notoColorEmoji.className}>📌</span> <strong className="ml-1">{selectedSeminar.title}</strong> (<span className={notoColorEmoji.className}>{selectedSeminar.flag}</span> ${selectedSeminar.country}・${selectedSeminar.date})
-                    </p>
-                    <span className="text-[26px] hover:text-red-500 hover:cursor-pointer" onClick={() => setIsVisible(false)}>&times;</span>
-                </div>
+                {
+                    selectedSeminars && (
+                        selectedSeminars.map(selectedSeminar => (
+                            <div className="flex justify-between items-center flex-nowrap text-[16px] py-4 px-[15px] bg-[#f9fafb] border-[1px] border-[#e5e7eb] rounded-[8px] my-2.5">
+                                <p>
+                                    <span className={notoColorEmoji.className}>📌</span> <strong className="ml-1">{selectedSeminar.title}</strong> (<span className={notoColorEmoji.className}>{selectedSeminar.flag}</span> ${selectedSeminar.country}・${selectedSeminar.date})
+                                </p>
+                                <span className="text-[26px] hover:text-red-500 hover:cursor-pointer" onClick={() => setIsVisible(false)}>&times;</span>
+                            </div>
+                        ))
+                    )
+                }
                 <form onSubmit={handleFormSubmition}>
                     <div className="w-full flex flex-col items-start mb-[15px]">
                         <label htmlFor="name" className="text-[16px] text-[#333] font-bold mb-[5px]">Name (required)</label>
