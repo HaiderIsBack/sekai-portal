@@ -15,7 +15,7 @@ const FeaturedSeminarCards = ({ handleSeminarSelection }: { handleSeminarSelecti
   useEffect(() => {
     const fetchSeminars = async () => {
       setLoading(true);
-      const { data, error }: any = await supabase.from("seminars")
+      const { data, error } = await supabase.from("seminars")
         .select('id, title, country, city, date, participants, category, event_type, flag, image_name, created_at')
         .order('created_at', { ascending: false })
         .limit(3);

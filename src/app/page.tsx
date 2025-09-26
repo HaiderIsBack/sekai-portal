@@ -17,7 +17,7 @@ const notoColorEmoji = Noto_Color_Emoji({
   weight: ["400"],
 });
 
-const Pill = ({ children }: any) => {
+const Pill = ({ children }: { children: React.ReactNode }) => {
   return (
     <span className="py-[10px] sm:py-[10px] px-4 sm:px-[20px] bg-[#f9f9f9] border-[1px] border-[#ddd] text-[12px] sm:text-[16px] rounded-[30px]">{children}</span>
   );

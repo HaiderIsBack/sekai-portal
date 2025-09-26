@@ -6,7 +6,6 @@ import Image from "next/image";
 import Button from "./Button";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { PostgrestSingleResponse } from "@supabase/supabase-js";
 
 const notoColorEmoji = Noto_Color_Emoji({
   subsets: [],

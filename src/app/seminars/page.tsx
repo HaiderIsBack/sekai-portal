@@ -22,7 +22,7 @@ export default function Seminars() {
     useEffect(() => {
         const fetchSeminars = async () => {
           setLoading(true);
-          const { data, error }: any = await supabase.from("seminars")
+          const { data, error } = await supabase.from("seminars")
             .select('id, title, country, city, date, participants, category, event_type, flag, image_name, created_at')
             .order('created_at', { ascending: false })
             .limit(20);
@@ -72,6 +72,7 @@ export default function Seminars() {
             </section>
 
             <section className="grid grid-cols-4 gap-4 mt-8">
+                {loading && <h3>Loading...</h3>}
                 {
                     seminars && (
                         seminars.map(seminar => {

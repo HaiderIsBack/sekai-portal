@@ -6,7 +6,7 @@ type ButtonProps = {
     href?: string;
     className?: string;
     children: React.ReactNode;
-    onClick?: any;
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const Button = ({ type, href, className = '', onClick, children }: ButtonProps) => {

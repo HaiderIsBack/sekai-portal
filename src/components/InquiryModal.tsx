@@ -25,7 +25,11 @@ const InquiryModal = ({ setIsVisible, selectedSeminars }: InquiryModalProps) => 
         const data = Object.fromEntries(formData.entries());
 
         const seminarListText = selectedSeminars.length > 0
-        ? selectedSeminars.map(s => `• ${s.title} (${s.flag} ${s.country}・${s.date})`).join('\n')
+        ? selectedSeminars.reduce(
+            (text, s) =>
+            text + `• ${s.title} (${s.flag} ${s.country}・${s.date})\n`,
+            ''
+            ).trim()
         : '一般的なご相談';
 
         const adminEmailParams = {
