@@ -9,10 +9,12 @@ import { useAppContext } from "@/context/AppContext";
 import SeminarCard from "@/components/SeminarCard";
 import SeminarDetailsModal from "@/components/SeminarDetailsModal";
 import InquiryModal from "@/components/InquiryModal";
+import AdminModal from "@/components/AdminModal";
 
 export default function Seminars() {
     const [seminarModalVisible, setSeminarModalVisible] = useState<boolean>(false);
     const [inquiryModalVisible, setInquiryModalVisible] = useState<boolean>(false);
+    const [adminModalVisible, setAdminModalVisible] = useState<boolean>(true);
     const [seminars, setSeminars] = useState<Seminar[]>([]);
     const [selectedSeminar, setSelectedSeminar] = useState<Seminar | null>(null);
     const [selectedSeminarIds, setSelectedSeminarIds] = useState<number[]>([]);
@@ -72,6 +74,7 @@ export default function Seminars() {
     
             if (data) {
                 // TODO:Delete this line
+                data.shift();
                 data.shift();
 
                 // console.log(offset, data.length, loadedCount);
@@ -182,7 +185,10 @@ export default function Seminars() {
             { selectedSeminarIds.length > 0 && <Button type="primary" className="fixed bottom-[30px] right-[30px] z-10" onClick={() => setInquiryModalVisible(true)}>一括で共催を相談する</Button> }
 
             {selectedSeminar && seminarModalVisible && <SeminarDetailsModal setIsVisible={setSeminarModalVisible} selectedSeminar={selectedSeminar} handleSingleInquirySelection={handleSingleInquirySelection} />}
+
             {inquiryModalVisible && <InquiryModal setIsVisible={setInquiryModalVisible} selectedSeminarIds={selectedSeminar ? [selectedSeminar.id] : (selectedSeminarIds.length > 0 ? selectedSeminarIds : [])} handleRemoveId={handleRemoveId} />}
+
+            {adminModalVisible && <AdminModal setIsVisible={setAdminModalVisible} />}
 
             <section className="flex items-center flex-wrap gap-5 p-5 bg-[#f9fafb]">
                 <input type="text" placeholder="セミナーを検索..." className="min-w-[150px] border-[1px] border-[#ccc] text-[14px] text-[#111] rounded-[4px] p-2 w-full md:w-auto" value={searchText} onChange={handleSearchTextChange} />

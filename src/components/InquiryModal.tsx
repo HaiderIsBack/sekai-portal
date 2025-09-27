@@ -146,7 +146,7 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId }: Inqu
                 <form onSubmit={handleFormSubmition}>
                     <div className="w-full flex flex-col items-start mb-[15px]">
                         <label htmlFor="name" className="text-[16px] text-[#333] font-bold mb-[5px]">Name (required)</label>
-                        <input type="text" name="your_name" id="name" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px]" required />
+                        <input type="text" name="name" id="name" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px]" required />
                     </div>
                     <div className="w-full flex flex-col items-start mb-[15px]">
                         <label htmlFor="email" className="text-[16px] text-[#333] font-bold mb-[5px]">Email Address (required)</label>
@@ -158,11 +158,11 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId }: Inqu
                     </div>
                     <div className="w-full flex flex-col items-start mb-[15px]">
                         <label htmlFor="company-name" className="text-[16px] text-[#333] font-bold mb-[5px]">Company Name (required)</label>
-                        <input type="text" name="company_name" id="company-name" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px]" required />
+                        <input type="text" name="company" id="company-name" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px]" required />
                     </div>
                     <div className="w-full flex flex-col items-start mb-[15px]">
                         <label htmlFor="socials" className="text-[16px] text-[#333] font-bold mb-[5px]">Social Media Profile Links (required)</label>
-                        <input type="text" name="socials" id="socials" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px]" placeholder="https://" required />
+                        <input type="text" name="social" id="socials" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px]" placeholder="https://" required />
                     </div>
                     <div className="w-full flex flex-col items-start mb-[15px]">
                         <label htmlFor="message" className="text-[16px] text-[#333] font-bold mb-[5px]">Message / Introduction</label>
