@@ -73,9 +73,9 @@ export default function Seminars() {
     
             if (data) {
                 // TODO:Delete this line
-                data.shift();
-                data.shift();
-                data.shift();
+                // data.shift();
+                // data.shift();
+                // data.shift();
 
                 // console.log(offset, data.length, loadedCount);
                 loadedCountRef.current = loadedCountRef.current + LIMIT - 1;
