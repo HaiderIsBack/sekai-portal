@@ -23,7 +23,6 @@ type InquiryModalProps = {
 
 const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGeneralUse, setIsGeneralUse }: InquiryModalProps) => {
     const [selectedSeminars, setSelectedSeminars] = useState<SeminarInfo[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         if (!selectedSeminarIds || selectedSeminarIds.length < 1 || isGeneralUse) return;
@@ -37,7 +36,6 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
         if (!selectedSeminarIds || selectedSeminarIds.length < 1 || isGeneralUse) return;
 
         const fetchSeminars = async () => {
-            setLoading(true);
             const { data, error } = await supabase.from("seminars")
             .select('id, title, country, date, flag')
             .in('id', selectedSeminarIds ?? [])
@@ -50,7 +48,6 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
             if (data) {
                 setSelectedSeminars(data);
             }
-            setLoading(false);
         }
         fetchSeminars();
     }, [selectedSeminarIds]);
@@ -97,7 +94,6 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
 
         emailjs.send('default_service', process.env.NEXT_PUBLIC_EMAILJS_ADMIN_TEMPLATE_ID ?? '', adminEmailParams)
         .then(() => {
-            console.log('Admin email sent successfully!');
             // 2. Send auto-reply email to the user using the correct ID
             const userTemplateId = process.env.NEXT_PUBLIC_EMAILJS_USER_TEMPLATE_ID ?? ''; // The correct ID from your screenshot
             return emailjs.send('default_service', userTemplateId, userEmailParams);
@@ -126,7 +122,6 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
                 <h2 className="text-2xl font-bold">登壇・共催のご相談</h2>
                 <span className="text-[38px] hover:text-red-500 hover:cursor-pointer" onClick={() => {setIsVisible(false); setSelectedSeminars([]); if(setIsGeneralUse) {setIsGeneralUse(false)}}}>&times;</span>
             </div>
-            {loading && <h3>Loading...</h3>}
 
             <div className="p-3 my-2">
                 {

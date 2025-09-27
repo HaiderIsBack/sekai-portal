@@ -36,3 +36,9 @@ body {
   overflow: hidden;
   height: 2.6em;
 }
+
+@media (width >= 1520px) {
+  .seminars-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
