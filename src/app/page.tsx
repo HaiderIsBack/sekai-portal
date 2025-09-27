@@ -3,7 +3,7 @@
 import Button from "@/components/Button";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Noto_Color_Emoji } from "next/font/google";
 
 import { Seminar } from "../types/Seminar";
@@ -13,7 +13,6 @@ import FeaturedSeminarCards from "@/components/FeaturedSeminarCards";
 import InquiryModal from "@/components/InquiryModal";
 import { useAppContext } from "@/context/AppContext";
 import AdminModal from "@/components/AdminModal";
-import { tree } from "next/dist/build/templates/app-page";
 
 const notoColorEmoji = Noto_Color_Emoji({
   subsets: [],
@@ -34,6 +33,12 @@ export default function Home() {
   const [isGeneralUse, setIsGeneralUse] = useState<boolean>(false);
 
   const { showAdminPanel, setShowAdminPanel } = useAppContext();
+
+  useEffect(() => {
+      if (!inquiryModalVisible) {
+          setSelectedSeminar(null);
+      }
+  }, [inquiryModalVisible]);
 
   const handleSeminarSelection = (seminar: Seminar) => {
     setSelectedSeminar(seminar);

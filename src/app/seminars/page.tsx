@@ -115,6 +115,12 @@ export default function Seminars() {
         }
     }, [searchText, selectedCountry, selectedCategory, selectedMonth]);
 
+    useEffect(() => {
+        if (!inquiryModalVisible) {
+            setSelectedSeminarIds([]);
+        }
+    }, [inquiryModalVisible]);
+
     const handleSeminarSelection = (seminar: Seminar) => {
         setSelectedSeminar(seminar);
         setSeminarModalVisible(true);
