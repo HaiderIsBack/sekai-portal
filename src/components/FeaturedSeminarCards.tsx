@@ -25,7 +25,7 @@ const FeaturedSeminarCards = ({ handleSeminarSelection }: { handleSeminarSelecti
         return;
       }
 
-      if (data && !error) {
+      if (data) {
         setSeminars(data);
       }
       setLoading(false);

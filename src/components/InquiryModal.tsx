@@ -1,10 +1,12 @@
 "use client";
 
-import { Seminar } from "@/types/Seminar";
+import { SeminarInfo } from "@/types/Seminar";
 import { Noto_Color_Emoji } from "next/font/google";
-import { FormEventHandler } from "react";
+import { FormEventHandler, useEffect, useState } from "react";
 
 import emailjs from "emailjs-com";
+
+import { supabase } from "@/lib/supabaseClient";
 
 const notoColorEmoji = Noto_Color_Emoji({
   subsets: [],
@@ -13,10 +15,39 @@ const notoColorEmoji = Noto_Color_Emoji({
 
 type InquiryModalProps = {
     setIsVisible: (inquiryModalVisible: boolean) => void;
-    selectedSeminars: Seminar[];
+    selectedSeminarIds: number[];
+    handleRemoveId: (id: number) => void;
 }
 
-const InquiryModal = ({ setIsVisible, selectedSeminars }: InquiryModalProps) => {
+const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId }: InquiryModalProps) => {
+    const [selectedSeminars, setSelectedSeminars] = useState<SeminarInfo[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (selectedSeminarIds.length < 1) {
+            setIsVisible(false);
+        }
+    }, [selectedSeminarIds]);
+
+    useEffect(() => {
+        const fetchSeminars = async () => {
+            setLoading(true);
+            const { data, error } = await supabase.from("seminars")
+            .select('id, title, country, date, flag')
+            .in('id', selectedSeminarIds)
+    
+            if (error) {
+                alert(error.message);
+                return;
+            }
+    
+            if (data) {
+                setSelectedSeminars(data);
+            }
+            setLoading(false);
+        }
+        fetchSeminars();
+    }, [selectedSeminarIds]);
 
     const handleFormSubmition: FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
@@ -106,7 +137,7 @@ const InquiryModal = ({ setIsVisible, selectedSeminars }: InquiryModalProps) => 
                                 <p>
                                     <span className={notoColorEmoji.className}>📌</span> <strong className="ml-1">{selectedSeminar.title}</strong> (<span className={notoColorEmoji.className}>{selectedSeminar.flag}</span> ${selectedSeminar.country}・${selectedSeminar.date})
                                 </p>
-                                <span className="text-[26px] hover:text-red-500 hover:cursor-pointer" onClick={() => setIsVisible(false)}>&times;</span>
+                                <span className="text-[26px] hover:text-red-500 hover:cursor-pointer" onClick={() => handleRemoveId(selectedSeminar.id)}>&times;</span>
                             </div>
                         ))
                     )

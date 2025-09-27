@@ -12,3 +12,11 @@ export type Seminar = {
   image_name: string | null;
   created_at: string;
 }
+
+export type SeminarInfo = {
+  id: number;
+  title: string;
+  country: string;
+  date: string;
+  flag: string;
+}
