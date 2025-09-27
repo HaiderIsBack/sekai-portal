@@ -128,6 +128,7 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId }: Inqu
                 <h2 className="text-2xl font-bold">Inquiries about speaking and co-hosting</h2>
                 <span className="text-[38px] hover:text-red-500 hover:cursor-pointer" onClick={() => setIsVisible(false)}>&times;</span>
             </div>
+            {loading && <h3>Loading...</h3>}
 
             <div className="p-3 my-2">
                 {
