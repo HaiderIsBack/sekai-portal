@@ -12,7 +12,7 @@ const Header = () => {
             <h1 className="font-[Helvetica, Ariel] text-[20px] font-bold"><Link href={"/"}>セカイポータル</Link></h1>
             <menu>
                 {links.map((link) => {
-                    return (<a key={link.href} href={link.href} className="ml-[20px] text-[16px] hover:text-[var(--primary)]">{link.name}</a>);
+                    return (<Link key={link.href} href={link.href} className="ml-[20px] text-[16px] hover:text-[var(--primary)]">{link.name}</Link>);
                 })}
             </menu>
         </header>
