@@ -45,7 +45,7 @@ const SeminarDetailsModal = ({ setIsVisible, selectedSeminar, handleSingleInquir
     return (
     <>
         <div className={`bg-gray-950/30 fixed top-0 left-0 w-full h-full z-20 ${selectedSeminar ? 'block' : 'hidden'}`} onClick={() => setIsVisible(false)} />
-        <div className="fixed top-1/2 left-1/2 -translate-1/2 w-full max-w-[700px] h-11/12 max-h-4/5 overflow-y-auto bg-white rounded-[10px] p-5 pt-0 z-30">
+        <div className="fixed top-1/2 left-1/2 -translate-1/2 w-full max-w-[700px] h-[80vh] max-h-[600px] overflow-y-auto bg-white rounded-[10px] p-5 pt-0 z-30">
             <div className="sticky top-0 bg-white flex justify-between items-center border-b-[1px] border-[#ddd] pt-[20px] pb-[12px] mb-[12px]">
                 <h2 className="text-2xl font-bold">セミナー詳細</h2>
                 <span className="text-[38px] hover:text-red-500 hover:cursor-pointer" onClick={() => setIsVisible(false)}>&times;</span>
