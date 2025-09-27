@@ -127,7 +127,7 @@ const AdminModal = ({ setIsVisible }: AdminModalProps) => {
                 interface Row {
                     date?: number | string;
                     participants?: number | string;
-                    [key: string]: any; // allow other keys
+                    [key: string]: unknown; // allow other keys
                 }
 
                 // Process data with consistent Japanese date formatting
