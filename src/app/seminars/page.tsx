@@ -73,9 +73,9 @@ export default function Seminars() {
     
             if (data) {
                 // TODO:Delete this line
-                // data.shift();
-                // data.shift();
-                // data.shift();
+                data.shift();
+                data.shift();
+                data.shift();
 
                 // console.log(offset, data.length, loadedCount);
                 loadedCountRef.current = loadedCountRef.current + LIMIT - 1;
@@ -118,6 +118,11 @@ export default function Seminars() {
     useEffect(() => {
         if (!inquiryModalVisible) {
             setSelectedSeminarIds([]);
+            const inputCheckboxes = document.querySelectorAll("input[type='checkbox']");
+
+            inputCheckboxes.forEach(e => {
+                (e as HTMLInputElement).checked = false;
+            });
         }
     }, [inquiryModalVisible]);
 
@@ -169,6 +174,7 @@ export default function Seminars() {
     const handleRemoveId = (id: number) => {
         if (selectedSeminar && selectedSeminar.id === id) {
             setSelectedSeminar(null);
+            setSelectedSeminarIds(prev => prev.filter(s => s !== id))
             return;
         }
         setSelectedSeminarIds(prev => prev.filter(s => s !== id))
@@ -188,7 +194,7 @@ export default function Seminars() {
     } 
 
     const seminarCards = useMemo(() => {
-        return <SeminarCardsList seminars={seminars} handleMultiSelect={handleMultiSelect} handleSeminarSelection={handleSeminarSelection} />
+        return <SeminarCardsList seminars={seminars} selectedSeminarIds={selectedSeminarIds} handleMultiSelect={handleMultiSelect} handleSeminarSelection={handleSeminarSelection} />
     }, [seminars]);
 
     return (
@@ -231,11 +237,12 @@ export default function Seminars() {
 
 type SeminarCardsListProps = {
     seminars: Seminar[];
+    selectedSeminarIds: number[];
     handleMultiSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleSeminarSelection: (seminar: Seminar) => void;
 }
 
-const SeminarCardsList = ({ seminars, handleMultiSelect, handleSeminarSelection }: SeminarCardsListProps) => {
+const SeminarCardsList = ({ seminars, selectedSeminarIds, handleMultiSelect, handleSeminarSelection }: SeminarCardsListProps) => {
     const { getImageSourceURL } = useAppContext();
     return (
         <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-8">

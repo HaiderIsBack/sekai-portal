@@ -266,7 +266,9 @@ const AdminModal = ({ setIsVisible }: AdminModalProps) => {
         <div className="fixed top-1/2 left-1/2 -translate-1/2 w-[90%] max-w-[900px] h-[80vh] max-h-[600px] overflow-y-auto bg-white rounded-[10px] p-8 pt-0 z-30">
             <div className="sticky top-0 bg-white flex justify-between items-center border-b-[1px] border-[#ddd] pt-[20px] pb-[18px] mb-[18px]">
                 <h2 className="text-2xl font-bold"><span className={notoColorEmoji.className}>🛠️</span> 管理者パネル</h2>
-                <span className="text-[38px] hover:text-red-500 hover:cursor-pointer" onClick={() => setIsVisible(false)}>&times;</span>
+                <Button type="secondary" onClick={() => setIsVisible(false)}>
+                    ✕ 閉じる
+                </Button>
             </div>
 
            <div className="w-full flex flex-col items-start mt-4 mb-[15px]">

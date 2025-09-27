@@ -148,7 +148,7 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
                                 <p>
                                     <span className={notoColorEmoji.className}>📌</span> <strong className="ml-1">{selectedSeminar.title}</strong> (<span className={notoColorEmoji.className}>{selectedSeminar.flag}</span> ${selectedSeminar.country}・${selectedSeminar.date})
                                 </p>
-                                <span className="text-[26px] hover:text-red-500 hover:cursor-pointer" onClick={() => handleRemoveId(selectedSeminar.id)}>&times;</span>
+                                <span className="text-[26px] hover:text-red-500 hover:cursor-pointer" onClick={() => {handleRemoveId(selectedSeminar.id); selectedSeminarIds = selectedSeminarIds?.filter(i => i !== selectedSeminar.id); selectedSeminarIds && selectedSeminarIds?.length === 0 ? setIsVisible(false) : null; console.log(selectedSeminarIds)}}>&times;</span>
                             </div>
                         ))
                     )
