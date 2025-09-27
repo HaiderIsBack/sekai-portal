@@ -15,26 +15,32 @@ const notoColorEmoji = Noto_Color_Emoji({
 
 type InquiryModalProps = {
     setIsVisible: (inquiryModalVisible: boolean) => void;
-    selectedSeminarIds: number[];
+    selectedSeminarIds?: number[];
+    isGeneralUse?: boolean;
+    setIsGeneralUse?: (isGeneralUse: boolean) => void;
     handleRemoveId: (id: number) => void;
 }
 
-const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId }: InquiryModalProps) => {
+const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGeneralUse, setIsGeneralUse }: InquiryModalProps) => {
     const [selectedSeminars, setSelectedSeminars] = useState<SeminarInfo[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        if (selectedSeminarIds.length < 1) {
+        if (!selectedSeminarIds || selectedSeminarIds.length < 1 || isGeneralUse) return;
+        
+        if (selectedSeminarIds && selectedSeminarIds.length < 1) {
             setIsVisible(false);
         }
     }, [selectedSeminarIds]);
-
+    
     useEffect(() => {
+        if (!selectedSeminarIds || selectedSeminarIds.length < 1 || isGeneralUse) return;
+
         const fetchSeminars = async () => {
             setLoading(true);
             const { data, error } = await supabase.from("seminars")
             .select('id, title, country, date, flag')
-            .in('id', selectedSeminarIds)
+            .in('id', selectedSeminarIds ?? [])
     
             if (error) {
                 alert(error.message);
@@ -104,34 +110,37 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId }: Inqu
         .catch((error) => {
             console.error('Email sending failed:', error);
             alert("Email not sent error occured");
-            // body.innerHTML = `
-            //     <div class="success-message">
-            //         <div style="font-size:48px; margin-bottom:20px;">❌</div>
-            //         <h3>送信に失敗しました</h3>
-            //         <p>
-            //             エラーが発生し、メッセージを送信できませんでした。時間をおいて再度お試しください。<br>
-            //             <small style="color: #666;">Error: ${error.text || 'An unknown error occurred.'}</small>
-            //         </p>
-            //         <div style="margin-top:30px;">
-            //             <button class="btn-secondary" onclick="closeInquiry()">閉じる</button>
-            //         </div>
-            //     </div>
-            // `;
         });
     }
 
     return (
     <>
-        <div className="bg-gray-950/30 fixed top-0 left-0 w-full h-full z-20" onClick={() => setIsVisible(false)} />
+        <div className="bg-gray-950/30 fixed top-0 left-0 w-full h-full z-20" onClick={() => {
+            setIsVisible(false); 
+            if (setIsGeneralUse)
+            setIsGeneralUse(false);
+        }} />
         <div className="fixed top-1/2 left-1/2 -translate-1/2 w-full max-w-[940px] h-11/12 max-h-4/5 overflow-y-auto bg-white rounded-[10px] p-5 pt-0 z-30">
             <div className="sticky top-0 bg-white flex justify-between items-center border-b-[1px] border-[#ddd] pt-[20px] pb-[12px] mb-[12px]">
-                <h2 className="text-2xl font-bold">Inquiries about speaking and co-hosting</h2>
+                <h2 className="text-2xl font-bold">登壇・共催のご相談</h2>
                 <span className="text-[38px] hover:text-red-500 hover:cursor-pointer" onClick={() => setIsVisible(false)}>&times;</span>
             </div>
             {loading && <h3>Loading...</h3>}
 
             <div className="p-3 my-2">
                 {
+                    isGeneralUse && (selectedSeminarIds?.length ?? 0) < 1 ? (
+                    <div className="flex justify-between items-center flex-nowrap text-[16px] py-4 px-[15px] bg-[#f9fafb] border-[1px] border-[#e5e7eb] rounded-[8px] my-2.5">
+                        <div className="flex flex-col gap-4 text-[16px]">
+                            <h3 className="font-bold">一般的なご相談</h3>
+                            <p>特定のセミナーを選択せず、一般的なご相談を承ります。</p>
+                        </div>
+                        <span className="text-[26px] hover:text-red-500 hover:cursor-pointer" onClick={() => {
+                            setIsVisible(false); 
+                            if (setIsGeneralUse)
+                            setIsGeneralUse(false);
+                        }}>&times;</span>
+                    </div>) :
                     selectedSeminars && (
                         selectedSeminars.map(selectedSeminar => (
                             <div key={selectedSeminar.id} className="flex justify-between items-center flex-nowrap text-[16px] py-4 px-[15px] bg-[#f9fafb] border-[1px] border-[#e5e7eb] rounded-[8px] my-2.5">
@@ -145,43 +154,43 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId }: Inqu
                 }
                 <form onSubmit={handleFormSubmition}>
                     <div className="w-full flex flex-col items-start mb-[15px]">
-                        <label htmlFor="name" className="text-[16px] text-[#333] font-bold mb-[5px]">Name (required)</label>
+                        <label htmlFor="name" className="text-[16px] text-[#333] font-bold mb-[5px]">お名前 (必須)</label>
                         <input type="text" name="name" id="name" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px]" required />
                     </div>
                     <div className="w-full flex flex-col items-start mb-[15px]">
-                        <label htmlFor="email" className="text-[16px] text-[#333] font-bold mb-[5px]">Email Address (required)</label>
+                        <label htmlFor="email" className="text-[16px] text-[#333] font-bold mb-[5px]">メールアドレス (必須)</label>
                         <input type="email" name="email" id="email" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px]" required />
                     </div>
                     <div className="w-full flex flex-col items-start mb-[15px]">
-                        <label htmlFor="position" className="text-[16px] text-[#333] font-bold mb-[5px]">Position</label>
+                        <label htmlFor="position" className="text-[16px] text-[#333] font-bold mb-[5px]">役職</label>
                         <input type="text" name="position" id="position" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px]" />
                     </div>
                     <div className="w-full flex flex-col items-start mb-[15px]">
-                        <label htmlFor="company-name" className="text-[16px] text-[#333] font-bold mb-[5px]">Company Name (required)</label>
+                        <label htmlFor="company-name" className="text-[16px] text-[#333] font-bold mb-[5px]">会社名 (必須)</label>
                         <input type="text" name="company" id="company-name" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px]" required />
                     </div>
                     <div className="w-full flex flex-col items-start mb-[15px]">
-                        <label htmlFor="socials" className="text-[16px] text-[#333] font-bold mb-[5px]">Social Media Profile Links (required)</label>
+                        <label htmlFor="socials" className="text-[16px] text-[#333] font-bold mb-[5px]">SNSプロフィールリンク (必須)</label>
                         <input type="text" name="social" id="socials" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px]" placeholder="https://" required />
                     </div>
                     <div className="w-full flex flex-col items-start mb-[15px]">
-                        <label htmlFor="message" className="text-[16px] text-[#333] font-bold mb-[5px]">Message / Introduction</label>
-                        <textarea name="message" id="message" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px] h-32 resize-y" placeholder="Tell us why do you want to speak" required />
+                        <label htmlFor="message" className="text-[16px] text-[#333] font-bold mb-[5px]">メッセージ・自己紹介</label>
+                        <textarea name="message" id="message" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px] h-32 resize-y" placeholder="登壇希望の理由や、あなたの専門分野について教えてください" required />
                     </div>
                     <div className="w-full flex flex-col items-start mb-[15px]">
-                        <label htmlFor="interview-date-1" className="text-[16px] text-[#333] font-bold mb-[5px]">Desired interview date and time 1</label>
+                        <label htmlFor="interview-date-1" className="text-[16px] text-[#333] font-bold mb-[5px]">希望面談日時 1</label>
                         <input type="datetime-local" name="interview_date_1" id="interview-date-1" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px]" />
                     </div>
                     <div className="w-full flex flex-col items-start mb-[15px]">
-                        <label htmlFor="interview-date-2" className="text-[16px] text-[#333] font-bold mb-[5px]">Desired interview date and time 2</label>
+                        <label htmlFor="interview-date-2" className="text-[16px] text-[#333] font-bold mb-[5px]">希望面談日時 2</label>
                         <input type="datetime-local" name="interview_date_2" id="interview-date-2" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px]" />
                     </div>
                     <div className="w-full flex flex-col items-start mb-[15px]">
-                        <label htmlFor="interview-date-3" className="text-[16px] text-[#333] font-bold mb-[5px]">Desired interview date and time 3</label>
+                        <label htmlFor="interview-date-3" className="text-[16px] text-[#333] font-bold mb-[5px]">希望面談日時 3</label>
                         <input type="datetime-local" name="interview_date_3" id="interview-date-3" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px]" />
                     </div>
 
-                    <button type="submit" className="w-full py-[10px] px-[20px] text-[14px] border-[1px] border-[var(--primary)] rounded-[6px] duration-200 hover:cursor-pointer bg-[var(--primary)] text-white hover:bg-[var(--secondary)]">Send</button>
+                    <button type="submit" className="w-full py-[10px] px-[20px] text-[14px] border-[1px] border-[var(--primary)] rounded-[6px] duration-200 hover:cursor-pointer bg-[var(--primary)] text-white hover:bg-[var(--secondary)]">送信する</button>
                 </form>
             </div>
         </div>

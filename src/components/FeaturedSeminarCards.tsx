@@ -26,6 +26,9 @@ const FeaturedSeminarCards = ({ handleSeminarSelection }: { handleSeminarSelecti
       }
 
       if (data) {
+        // data.shift();
+        // data.shift();
+        // data.shift();
         setSeminars(data);
       }
       setLoading(false);

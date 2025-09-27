@@ -7,6 +7,8 @@ type AppContextType = {
     imageCounter: number;
     availableImages: string[];
     getImageSourceURL: (imageName?: string) => string;
+    showAdminPanel: boolean;
+    setShowAdminPanel: (showAdminPanel: boolean) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -14,6 +16,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider = ({ children }: {children: React.ReactNode}) => {
     const imageCounter = useRef<number>(0);
     const [availableImages, setAvailableImages] = useState<string[]>([]);
+    const [showAdminPanel, setShowAdminPanel] = useState(false);
 
     const STORAGE_BUCKET = 'assets';
     const STORAGE_FOLDER = '';
@@ -82,7 +85,7 @@ export const AppProvider = ({ children }: {children: React.ReactNode}) => {
     }
 
     return (
-        <AppContext.Provider value={{ availableImages, imageCounter: imageCounter.current, getImageSourceURL }}>
+        <AppContext.Provider value={{ availableImages, imageCounter: imageCounter.current, getImageSourceURL, showAdminPanel, setShowAdminPanel }}>
             {children}
         </AppContext.Provider>
     );

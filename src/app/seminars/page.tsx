@@ -2,7 +2,7 @@
 
 import Button from "@/components/Button";
 import { Seminar } from "@/types/Seminar";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useAppContext } from "@/context/AppContext";
 
@@ -14,7 +14,6 @@ import AdminModal from "@/components/AdminModal";
 export default function Seminars() {
     const [seminarModalVisible, setSeminarModalVisible] = useState<boolean>(false);
     const [inquiryModalVisible, setInquiryModalVisible] = useState<boolean>(false);
-    const [adminModalVisible, setAdminModalVisible] = useState<boolean>(true);
     const [seminars, setSeminars] = useState<Seminar[]>([]);
     const [selectedSeminar, setSelectedSeminar] = useState<Seminar | null>(null);
     const [selectedSeminarIds, setSelectedSeminarIds] = useState<number[]>([]);
@@ -28,7 +27,7 @@ export default function Seminars() {
 
     const loadedCountRef = useRef(0);
 
-    const { getImageSourceURL } = useAppContext();
+    const { showAdminPanel, setShowAdminPanel } = useAppContext();
 
     useEffect(() => {
         const LIMIT = 20;
@@ -63,7 +62,7 @@ export default function Seminars() {
 
             const { data, error } = await query
                 .order('created_at', { ascending: false })
-                .range(offset, offset + LIMIT - 1);
+                .range(offset, offset + LIMIT);
 
     
             if (error) {
@@ -74,8 +73,9 @@ export default function Seminars() {
     
             if (data) {
                 // TODO:Delete this line
-                data.shift();
-                data.shift();
+                // data.shift();
+                // data.shift();
+                // data.shift();
 
                 // console.log(offset, data.length, loadedCount);
                 loadedCountRef.current = loadedCountRef.current + LIMIT - 1;
@@ -180,6 +180,11 @@ export default function Seminars() {
             }
         });
     } 
+
+    const seminarCards = useMemo(() => {
+        return <SeminarCardsList seminars={seminars} handleMultiSelect={handleMultiSelect} handleSeminarSelection={handleSeminarSelection} />
+    }, [seminars]);
+
     return (
         <main className="w-full max-w-[1500px] mx-auto p-5">
             { selectedSeminarIds.length > 0 && <Button type="primary" className="fixed bottom-[30px] right-[30px] z-10" onClick={() => setInquiryModalVisible(true)}>一括で共催を相談する</Button> }
@@ -188,16 +193,18 @@ export default function Seminars() {
 
             {inquiryModalVisible && <InquiryModal setIsVisible={setInquiryModalVisible} selectedSeminarIds={selectedSeminar ? [selectedSeminar.id] : (selectedSeminarIds.length > 0 ? selectedSeminarIds : [])} handleRemoveId={handleRemoveId} />}
 
-            {adminModalVisible && <AdminModal setIsVisible={setAdminModalVisible} />}
+            {showAdminPanel && <AdminModal setIsVisible={setShowAdminPanel} />}
 
             <section className="flex items-center flex-wrap gap-5 p-5 bg-[#f9fafb]">
                 <input type="text" placeholder="セミナーを検索..." className="min-w-[150px] border-[1px] border-[#ccc] text-[14px] text-[#111] rounded-[4px] p-2 w-full md:w-auto" value={searchText} onChange={handleSearchTextChange} />
                 <select name="country" id="filter-country" className="min-w-[170px] border-[1px] border-[#ccc] text-[14px] text-[#111] rounded-[4px] p-2.5 w-full md:w-auto" value={selectedCountry} onChange={handleCountryChange}>
                     <option value="">国を選択</option>
+                    <option value="USA">USA</option>
                     <option value="アメリカ">アメリカ</option>
                 </select>
                 <select name="category" id="filter-category" className="min-w-[170px] border-[1px] border-[#ccc] text-[14px] text-[#111] rounded-[4px] p-2.5 w-full md:w-auto" value={selectedCategory} onChange={handleCategoryChange}>
                     <option value="">カテゴリを選択</option>
+                    <option value="Technology">Technology</option>
                     <option value="キャリアとビジネス">キャリアとビジネス</option>
                 </select>
                 <select name="month" id="filter-month" className="min-w-[170px] border-[1px] border-[#ccc] text-[14px] text-[#111] rounded-[4px] p-2.5 w-full md:w-auto" value={selectedMonth} onChange={handleMonthChange}>
@@ -210,21 +217,34 @@ export default function Seminars() {
                 <Button type="secondary" onClick={clearFilters} className="w-full md:w-auto">一覧に戻る</Button>
             </section>
             
-            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-8">
-                {
-                    seminars && (
-                        seminars.map(seminar => {
-                            return (
-                                <div className="relative group" key={seminar.id}>
-                                    <input type="checkbox" value={seminar.id} className="scale-150 duration-300 group-hover:-translate-y-1 absolute top-[20px] left-[20px] z-10 hover:cursor-pointer" onChange={handleMultiSelect} />
-                                    <SeminarCard seminar={!seminar.image_name ? {...seminar, image_name: getImageSourceURL()} : seminar} handleSeminarSelection={handleSeminarSelection} />
-                                </div>
-                            );
-                        })
-                    )
-                }
-            </section>
+            {seminarCards}
             {loading && <h3>読み込み中...</h3>}
         </main>
+    );
+}
+
+type SeminarCardsListProps = {
+    seminars: Seminar[];
+    handleMultiSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleSeminarSelection: (seminar: Seminar) => void;
+}
+
+const SeminarCardsList = ({ seminars, handleMultiSelect, handleSeminarSelection }: SeminarCardsListProps) => {
+    const { getImageSourceURL } = useAppContext();
+    return (
+        <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-8">
+            {
+                seminars && (
+                    seminars.map(seminar => {
+                        return (
+                            <div className="relative group" key={seminar.id}>
+                                <input type="checkbox" value={seminar.id} className="scale-150 duration-300 group-hover:-translate-y-1 absolute top-[20px] left-[20px] z-10 hover:cursor-pointer" onChange={handleMultiSelect} />
+                                <SeminarCard seminar={!seminar.image_name ? {...seminar, image_name: getImageSourceURL()} : seminar} handleSeminarSelection={handleSeminarSelection} />
+                            </div>
+                        );
+                    })
+                )
+            }
+        </section>
     );
 }

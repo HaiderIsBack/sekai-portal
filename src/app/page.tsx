@@ -3,7 +3,7 @@
 import Button from "@/components/Button";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Noto_Color_Emoji } from "next/font/google";
 
 import { Seminar } from "../types/Seminar";
@@ -11,6 +11,9 @@ import SeminarDetailsModal from "@/components/SeminarDetailsModal";
 
 import FeaturedSeminarCards from "@/components/FeaturedSeminarCards";
 import InquiryModal from "@/components/InquiryModal";
+import { useAppContext } from "@/context/AppContext";
+import AdminModal from "@/components/AdminModal";
+import { tree } from "next/dist/build/templates/app-page";
 
 const notoColorEmoji = Noto_Color_Emoji({
   subsets: [],
@@ -28,6 +31,10 @@ export default function Home() {
   const [inquiryModalVisible, setInquiryModalVisible] = useState<boolean>(false);
   const [selectedSeminar, setSelectedSeminar] = useState<Seminar | null>(null);
 
+  const [isGeneralUse, setIsGeneralUse] = useState<boolean>(false);
+
+  const { showAdminPanel, setShowAdminPanel } = useAppContext();
+
   const handleSeminarSelection = (seminar: Seminar) => {
     setSelectedSeminar(seminar);
     setSeminarModalVisible(true);
@@ -43,17 +50,31 @@ export default function Home() {
       setSelectedSeminar(null);
     }
   }
+
+  const FeaturedSeminarCardsList = useMemo(() => {
+    return (
+      <FeaturedSeminarCards handleSeminarSelection={handleSeminarSelection} />
+    );
+  }, []);
   return (
     <main>
       {selectedSeminar && seminarModalVisible && <SeminarDetailsModal setIsVisible={setSeminarModalVisible} selectedSeminar={selectedSeminar} handleSingleInquirySelection={handleSingleInquirySelection} />}
-      {selectedSeminar && inquiryModalVisible && <InquiryModal setIsVisible={setInquiryModalVisible} selectedSeminarIds={[selectedSeminar.id]} handleRemoveId={handleRemoveId} />}
+      {(selectedSeminar || isGeneralUse) && inquiryModalVisible && (
+        <InquiryModal
+          setIsVisible={setInquiryModalVisible}
+          isGeneralUse={isGeneralUse}
+          selectedSeminarIds={selectedSeminar ? [selectedSeminar.id] : []}
+          handleRemoveId={handleRemoveId}
+        />
+      )}
+      {showAdminPanel && <AdminModal setIsVisible={setShowAdminPanel} />}
 
       <section className="max-w-[1500px] mx-auto w-full flex flex-col justify-center items-center gap-4 py-[60px] px-[20px]">
         <h2 className="text-[20px] md:text-[32px] sm:text-[24px] font-bold mt-[26px]"><span className={notoColorEmoji.className}>🌏</span>世界を動かそう</h2>
         <p className="text-[16px] sm:text-[18px] text-center">海外セミナーで登壇・共催し、新しい顧客とつながろう</p>
         <div className="w-full sm:w-fit flex items-center flex-col sm:flex-row gap-4 my-3">
-          <Button type='primary' href='#' className="w-full flex-1 sm:flex-auto sm:w-fit text-center sm:text-left">セミナーを探す</Button>
-          <Button type='secondary' href='#' className="w-full flex-1 sm:flex-auto sm:w-fit text-center sm:text-left">相談する</Button>
+          <Button type='primary' href='/seminars' className="w-full flex-1 sm:flex-auto sm:w-fit text-center sm:text-left">セミナーを探す</Button>
+          <Button type='secondary' onClick={() => {setIsGeneralUse(true); setInquiryModalVisible(true);}} className="w-full flex-1 sm:flex-auto sm:w-fit text-center sm:text-left">相談する</Button>
         </div>
         <div className="max-w-[100%] flex justify-center gap-2 sm:gap-4 flex-wrap">
           <Pill>世界の舞台に立つ</Pill>
@@ -84,7 +105,7 @@ export default function Home() {
 
       <section className="max-w-[1500px] mx-auto py-[40px] px-[20px]">
         <h2 className="text-2xl mt-[24px] mb-[20px] font-bold">直近のセミナー</h2>
-        <FeaturedSeminarCards handleSeminarSelection={handleSeminarSelection} />
+        { FeaturedSeminarCardsList }
         <Link href={'/seminars'} className="block mt-4 text-right text-[18px] text-[var(--primary)] font-bold hover:underline">すべてのセミナーを見る →</Link>
       </section>
 
