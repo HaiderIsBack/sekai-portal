@@ -199,7 +199,7 @@ export default function Seminars() {
 
     return (
         <main className="w-full max-w-[1500px] mx-auto p-5">
-            { selectedSeminarIds.length > 0 && <Button type="primary" className="fixed bottom-[30px] right-[30px] z-10" onClick={() => setInquiryModalVisible(true)}>一括で共催を相談する</Button> }
+            { selectedSeminarIds.length > 0 && <Button type="primary" className="fixed bottom-[30px] right-[30px] rounded-full z-10" onClick={() => setInquiryModalVisible(true)}>一括で共催を相談する</Button> }
 
             {selectedSeminar && seminarModalVisible && <SeminarDetailsModal setIsVisible={setSeminarModalVisible} selectedSeminar={selectedSeminar} handleSingleInquirySelection={handleSingleInquirySelection} />}
 
