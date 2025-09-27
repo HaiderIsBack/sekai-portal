@@ -10,7 +10,12 @@ const notoColorEmoji = Noto_Color_Emoji({
   weight: ["400"],
 });
 
-const LoginPanel = ({ setIsVisible, setIsAuthenticated }: any) => {
+type LoginPanelProps = {
+    setIsVisible: (adminModalVisible: boolean) => void;
+    setIsAuthenticated: (isAuthenticated: boolean) => void;
+}
+
+const LoginPanel = ({ setIsVisible, setIsAuthenticated }: LoginPanelProps) => {
 
     const handleLoginFormSubmition: FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
@@ -119,14 +124,21 @@ const AdminModal = ({ setIsVisible }: AdminModalProps) => {
                     return;
                 }
 
+                interface Row {
+                    date?: number | string;
+                    participants?: number | string;
+                    [key: string]: any; // allow other keys
+                }
+
                 // Process data with consistent Japanese date formatting
                 const processedData = json.map(row => {
                     if (typeof row !== "object" || row === null) return {};
-                    const processedRow = { ...row };
+                    const processedRow: Row = { ...row };
                     
                     // Handle the date column and format as Japanese
-                    if ((row as any).date) {
-                        const dateValue = (row as any).date;
+                    if ((row as Row).date) {
+                        const rawDate = (row as Row).date;
+                        const dateValue = parseInt(rawDate !== undefined ? String(rawDate) : "");
                         
                         if (!isNaN(dateValue) && typeof dateValue === 'number') {
                             // Convert Excel serial date to JavaScript Date
@@ -134,20 +146,25 @@ const AdminModal = ({ setIsVisible }: AdminModalProps) => {
                             const month = excelDate.getMonth() + 1;
                             const day = excelDate.getDate();
                             // Format as Japanese date
-                            (processedRow as any).date = `2025年${month}月${day}日`;
-                        } else if (typeof dateValue === 'string') {
+                            (processedRow as Row).date = `2025年${month}月${day}日`;
+                        } else if (typeof rawDate === 'string') {
                             // Try to parse and reformat as Japanese
-                            const parsedDate = new Date(dateValue);
-                            if (!isNaN(parsedDate as any)) {
+                            const parsedDate = new Date(rawDate);
+                            if (!isNaN(parsedDate.getTime())) {
                                 const month = parsedDate.getMonth() + 1;
                                 const day = parsedDate.getDate();
-                                (processedRow as any).date = `2025年${month}月${day}日`;
+                                (processedRow as Row).date = `2025年${month}月${day}日`;
                             }
                         }
                     }
                     
-                    if ((row as any).participants && !isNaN((row as any).participants)) {
-                        (processedRow as any).participants = parseInt((row as any).participants);
+                    if (
+                        (row as Row).participants !== undefined &&
+                        (row as Row).participants !== null &&
+                        (typeof (row as Row).participants === "string" || typeof (row as Row).participants === "number") &&
+                        !isNaN(Number((row as Row).participants))
+                    ) {
+                        (processedRow as Row).participants = parseInt(String((row as Row).participants));
                     }
                     
                     return processedRow;
