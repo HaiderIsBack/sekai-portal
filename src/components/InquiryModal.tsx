@@ -219,7 +219,7 @@ const SuccessMessage = ({ setIsVisible }: SuccessMessageProps) => {
     return (
         <div className="h-[70%] flex flex-col justify-center items-center">
             <div className="text-[48px] mb-5 text-center"><span className={notoColorEmoji.className}>✅</span></div>
-            <h3 className="text-center">お申し込みありがとうございます！</h3>
+            <h3 className="text-center text-[24px] font-bold my-5">お申し込みありがとうございます！</h3>
             <p className="text-center">ご入力いただいたメールアドレス宛に確認メールを送信しました。<br />運営チームより3営業日以内にご連絡いたします。</p>
             <div className="mt-[30px]">
                 <Button type="primary" onClick={() => setIsVisible(false)}>閉じる</Button>
@@ -237,7 +237,7 @@ const ErrorMessage = ({ setIsVisible, errorText }: ErrorMessageProps) => {
     return (
         <div className="h-[70%] flex flex-col justify-center items-center">
             <div className="text-[48px] mb-5 text-center">❌</div>
-            <h3>送信に失敗しました</h3>
+            <h3 className="text-[24px] my-5 font-bold">送信に失敗しました</h3>
             <p className="text-center">
                 エラーが発生し、メッセージを送信できませんでした。時間をおいて再度お試しください。<br />
                 <small className="text-[#666] text-center">Error: {errorText || 'An unknown error occurred.'}</small>
