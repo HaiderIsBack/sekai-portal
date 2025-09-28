@@ -7,6 +7,7 @@ import { FormEventHandler, useEffect, useState } from "react";
 import emailjs from "emailjs-com";
 
 import { supabase } from "@/lib/supabaseClient";
+import Button from "./Button";
 
 const notoColorEmoji = Noto_Color_Emoji({
   subsets: [],
@@ -23,6 +24,9 @@ type InquiryModalProps = {
 
 const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGeneralUse, setIsGeneralUse }: InquiryModalProps) => {
     const [selectedSeminars, setSelectedSeminars] = useState<SeminarInfo[]>([]);
+    const [successModalVisible, setSuccessModalVisible] = useState<boolean>(false);
+    const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
+    const [errorText, setErrorText] = useState<string>('');
 
     useEffect(() => {
         if (!selectedSeminarIds || selectedSeminarIds.length < 1 || isGeneralUse) return;
@@ -100,12 +104,13 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
         })
         .then(() => {
             console.log('User auto-reply sent successfully!');
-            alert("Both emails have been sent successfully");
+            setSuccessModalVisible(true);
             // showSuccessMessage(); // Show success only after both emails are handled
         })
         .catch((error) => {
             console.error('Email sending failed:', error);
-            alert("Email not sent error occured");
+            setErrorText(error)
+            setErrorModalVisible(true);
         });
     }
 
@@ -123,7 +128,10 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
                 <span className="text-[38px] hover:text-red-500 hover:cursor-pointer" onClick={() => {setIsVisible(false); setSelectedSeminars([]); if(setIsGeneralUse) {setIsGeneralUse(false)}}}>&times;</span>
             </div>
 
-            <div className="p-3 my-2">
+            {successModalVisible && <SuccessMessage setIsVisible={setSuccessModalVisible} />}
+            {errorModalVisible && <ErrorMessage setIsVisible={setErrorModalVisible} errorText={errorText} />}
+
+            {!successModalVisible && !errorModalVisible ? (<div className="p-3 my-2">
                 {
                     isGeneralUse && (selectedSeminarIds?.length ?? 0) < 1 ? (
                     <div className="flex justify-between items-center flex-nowrap text-[16px] py-4 px-[15px] bg-[#f9fafb] border-[1px] border-[#e5e7eb] rounded-[8px] my-2.5">
@@ -183,9 +191,47 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
 
                     <button type="submit" className="w-full py-[10px] px-[20px] text-[14px] border-[1px] border-[var(--primary)] rounded-[6px] duration-200 hover:cursor-pointer bg-[var(--primary)] text-white hover:bg-[var(--secondary)]">送信する</button>
                 </form>
-            </div>
+            </div>) : null}
         </div>
     </>
+    );
+}
+
+type SuccessMessageProps = {
+    setIsVisible: (isVisible: boolean) => void;
+}
+
+const SuccessMessage = ({ setIsVisible }: SuccessMessageProps) => {
+    return (
+        <div className="h-[70%] flex flex-col justify-center items-center">
+            <div className="text-[48px] mb-5 text-center"><span className={notoColorEmoji.className}>✅</span></div>
+            <h3 className="text-center">お申し込みありがとうございます！</h3>
+            <p className="text-center">ご入力いただいたメールアドレス宛に確認メールを送信しました。<br />運営チームより3営業日以内にご連絡いたします。</p>
+            <div className="mt-[30px]">
+                <Button type="primary" onClick={() => setIsVisible(false)}>閉じる</Button>
+            </div>
+        </div>
+    );
+}
+
+type ErrorMessageProps = {
+    setIsVisible: (isVisible: boolean) => void;
+    errorText: string;
+}
+
+const ErrorMessage = ({ setIsVisible, errorText }: ErrorMessageProps) => {
+    return (
+        <div className="h-[70%] flex flex-col justify-center items-center">
+            <div className="text-[48px] mb-5 text-center">❌</div>
+            <h3>送信に失敗しました</h3>
+            <p>
+                エラーが発生し、メッセージを送信できませんでした。時間をおいて再度お試しください。<br />
+                <small className="text-[#666]">Error: ${errorText || 'An unknown error occurred.'}</small>
+            </p>
+            <div className="mt-[30px]">
+                <Button type="secondary" onClick={() => setIsVisible(false)}>閉じる</Button>
+            </div>
+        </div>
     );
 }
 
