@@ -109,7 +109,7 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
         })
         .catch((error) => {
             console.error('Email sending failed:', error);
-            setErrorText(error)
+            setErrorText("Email Sending Failed");
             setErrorModalVisible(true);
         });
     }
@@ -128,8 +128,8 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
                 <span className="text-[38px] hover:text-red-500 hover:cursor-pointer" onClick={() => {setIsVisible(false); setSelectedSeminars([]); if(setIsGeneralUse) {setIsGeneralUse(false)}}}>&times;</span>
             </div>
 
-            {successModalVisible && <SuccessMessage setIsVisible={setSuccessModalVisible} />}
-            {errorModalVisible && <ErrorMessage setIsVisible={setErrorModalVisible} errorText={errorText} />}
+            {successModalVisible && <SuccessMessage setIsVisible={setIsVisible} />}
+            {errorModalVisible && <ErrorMessage setIsVisible={setIsVisible} errorText={errorText} />}
 
             {!successModalVisible && !errorModalVisible ? (<div className="p-3 my-2">
                 {
@@ -224,9 +224,9 @@ const ErrorMessage = ({ setIsVisible, errorText }: ErrorMessageProps) => {
         <div className="h-[70%] flex flex-col justify-center items-center">
             <div className="text-[48px] mb-5 text-center">❌</div>
             <h3>送信に失敗しました</h3>
-            <p>
+            <p className="text-center">
                 エラーが発生し、メッセージを送信できませんでした。時間をおいて再度お試しください。<br />
-                <small className="text-[#666]">Error: ${errorText || 'An unknown error occurred.'}</small>
+                <small className="text-[#666] text-center">Error: {errorText || 'An unknown error occurred.'}</small>
             </p>
             <div className="mt-[30px]">
                 <Button type="secondary" onClick={() => setIsVisible(false)}>閉じる</Button>

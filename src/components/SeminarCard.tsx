@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Noto_Color_Emoji } from "next/font/google";
 import Button from "./Button";
 import { Seminar } from "@/types/Seminar";
