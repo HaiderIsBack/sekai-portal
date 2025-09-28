@@ -131,11 +131,6 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
                             <h3 className="font-bold">一般的なご相談</h3>
                             <p>特定のセミナーを選択せず、一般的なご相談を承ります。</p>
                         </div>
-                        <span className="text-[26px] hover:text-red-500 hover:cursor-pointer" onClick={() => {
-                            setIsVisible(false); 
-                            if (setIsGeneralUse)
-                            setIsGeneralUse(false);
-                        }}>&times;</span>
                     </div>) :
                     selectedSeminars && (
                         selectedSeminars.map(selectedSeminar => (
