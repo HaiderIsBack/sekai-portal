@@ -27,6 +27,7 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
     const [successModalVisible, setSuccessModalVisible] = useState<boolean>(false);
     const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
     const [errorText, setErrorText] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         if (!selectedSeminarIds || selectedSeminarIds.length < 1 || isGeneralUse) return;
@@ -96,22 +97,33 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
             emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_USER_ID ?? '');
         })();
 
-        emailjs.send('default_service', process.env.NEXT_PUBLIC_EMAILJS_ADMIN_TEMPLATE_ID ?? '', adminEmailParams)
-        .then(() => {
-            // 2. Send auto-reply email to the user using the correct ID
-            const userTemplateId = process.env.NEXT_PUBLIC_EMAILJS_USER_TEMPLATE_ID ?? ''; // The correct ID from your screenshot
-            return emailjs.send('default_service', userTemplateId, userEmailParams);
-        })
-        .then(() => {
-            console.log('User auto-reply sent successfully!');
-            setSuccessModalVisible(true);
-            // showSuccessMessage(); // Show success only after both emails are handled
-        })
-        .catch((error) => {
-            console.error('Email sending failed:', error);
-            setErrorText("Email Sending Failed");
-            setErrorModalVisible(true);
-        });
+        setLoading(true);
+        try {
+            emailjs.send('default_service', process.env.NEXT_PUBLIC_EMAILJS_ADMIN_TEMPLATE_ID ?? '', adminEmailParams)
+            .then(() => {
+                // 2. Send auto-reply email to the user using the correct ID
+                const userTemplateId = process.env.NEXT_PUBLIC_EMAILJS_USER_TEMPLATE_ID ?? ''; // The correct ID from your screenshot
+                return emailjs.send('default_service', userTemplateId, userEmailParams);
+            })
+            .then(() => {
+                console.log('User auto-reply sent successfully!');
+                setSuccessModalVisible(true);
+                // showSuccessMessage(); // Show success only after both emails are handled
+            })
+            .catch((error) => {
+                console.error('Email sending failed:', error);
+                setErrorText("Email Sending Failed");
+                setErrorModalVisible(true);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+        } catch (error) {
+            if(error instanceof Error){
+                setErrorText(error.message);
+                setErrorModalVisible(true);
+            }
+        }
     }
 
     return (
@@ -131,7 +143,9 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
             {successModalVisible && <SuccessMessage setIsVisible={setIsVisible} />}
             {errorModalVisible && <ErrorMessage setIsVisible={setIsVisible} errorText={errorText} />}
 
-            {!successModalVisible && !errorModalVisible ? (<div className="p-3 my-2">
+            {loading && <div className="text-center py-[200px]">送信中...</div>}
+
+            {!successModalVisible && !errorModalVisible && !loading ? (<div className="p-3 my-2">
                 {
                     isGeneralUse && (selectedSeminarIds?.length ?? 0) < 1 ? (
                     <div className="flex justify-between items-center flex-nowrap text-[16px] py-4 px-[15px] bg-[#f9fafb] border-[1px] border-[#e5e7eb] rounded-[8px] my-2.5">
@@ -170,7 +184,7 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
                     </div>
                     <div className="w-full flex flex-col items-start mb-[15px]">
                         <label htmlFor="socials" className="text-[16px] text-[#333] font-bold mb-[5px]">SNSプロフィールリンク (必須)</label>
-                        <input type="text" name="social" id="socials" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px]" placeholder="https://" required />
+                        <input type="url" name="social" id="socials" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px]" placeholder="https://" required />
                     </div>
                     <div className="w-full flex flex-col items-start mb-[15px]">
                         <label htmlFor="message" className="text-[16px] text-[#333] font-bold mb-[5px]">メッセージ・自己紹介</label>

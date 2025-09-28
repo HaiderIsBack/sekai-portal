@@ -230,7 +230,9 @@ export default function Seminars() {
             </section>
             
             {seminarCards}
-            {loading && <h3>読み込み中...</h3>}
+            <div className="py-[50px] text-center">
+                {loading && <h3>データを読み込み中...</h3>}
+            </div>
         </main>
     );
 }

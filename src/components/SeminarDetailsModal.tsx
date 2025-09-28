@@ -20,28 +20,48 @@ type SeminarDetailsModalProps = {
 
 const SeminarDetailsModal = ({ setIsVisible, selectedSeminar, handleSingleInquirySelection }: SeminarDetailsModalProps) => {
     const [seminarContent, setSeminarContent] = useState('');
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchSeminarContent = async () => {
             if (!selectedSeminar) return;
 
+            setLoading(true);
             const { data, error } = await supabase
                 .from('seminars')
                 .select('seminar_details')
                 .eq('id', selectedSeminar.id)
                 .single();
 
-                if (error) {
-                    alert('Error occured');
-                    return;
-                }
-
-                if (data && !error) {
-                    setSeminarContent(data.seminar_details);
-                }
+            if (error) {
+                alert('Error occured');
+                return;
             }
+
+            if (data && !error) {
+                setSeminarContent(data.seminar_details);
+            }
+            setLoading(false);
+        }
         fetchSeminarContent();
-    });
+    }, []);
+
+    if (loading) {
+        return (
+            <>
+                <div className={`bg-gray-950/30 fixed top-0 left-0 w-full h-full z-20 ${selectedSeminar ? 'block' : 'hidden'}`} onClick={() => setIsVisible(false)} />
+                <div className="fixed top-1/2 left-1/2 -translate-1/2 w-full max-w-[700px] h-[80vh] max-h-[600px] overflow-y-auto bg-white rounded-[10px] p-5 pt-0 z-30">
+                    <div className="sticky top-0 bg-white flex justify-between items-center border-b-[1px] border-[#ddd] pt-[20px] pb-[12px] mb-[12px]">
+                        <h2 className="text-2xl font-bold">セミナー詳細</h2>
+                        <span className="text-[38px] hover:text-red-500 hover:cursor-pointer" onClick={() => setIsVisible(false)}>&times;</span>
+                    </div>
+
+                    <h3 className="py-[100px] text-center">詳細を読み込み中...</h3>
+                </div>
+            </>
+        )
+    }
+
     return (
     <>
         <div className={`bg-gray-950/30 fixed top-0 left-0 w-full h-full z-20 ${selectedSeminar ? 'block' : 'hidden'}`} onClick={() => setIsVisible(false)} />
