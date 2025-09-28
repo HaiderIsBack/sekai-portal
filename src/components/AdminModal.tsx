@@ -271,10 +271,11 @@ const AdminModal = ({ setIsVisible }: AdminModalProps) => {
                 </Button>
             </div>
 
-           <div className="w-full flex flex-col items-start mt-4 mb-[15px]">
+           <div className="w-full flex flex-col items-start mt-4 mb-[15px] relative">
                 <label htmlFor="file-upload" className="text-[16px] text-[#333] font-bold mb-[5px]"><span className={notoColorEmoji.className}>📁</span><strong>セミナーデータ Excel アップロード</strong></label>
-                <input type="file" accept=".xlsx, .xls" name="file_upload" id="file-upload" className="w-full p-2.5 border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px]" onChange={(e) => setFileInput(e.target.files)} />
+                <input type="file" accept=".xlsx, .xls" name="file_upload" id="file-upload" className="w-full p-2.5 pl-[23px] border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px] hover:cursor-pointer" onChange={(e) => setFileInput(e.target.files)} />
                 <Button type="primary" onClick={uploadExcel} className="mt-4">アップロード</Button>
+                <span className="absolute top-[39px] left-[10px] py-[1px] px-[6px] bg-[#f0f0f0] border-[1px] border-black rounded-sm text-[14px] pointer-events-none">Choose File</span>
             </div>
 
             <span className="my-4 text-[16px]" ref={statusRef}></span>
