@@ -9,6 +9,7 @@ import { useAppContext } from "@/context/AppContext";
 import SeminarCard from "@/components/SeminarCard";
 import SeminarDetailsModal from "@/components/SeminarDetailsModal";
 import InquiryModal from "@/components/InquiryModal";
+import AdminModal from "@/components/AdminModal";
 
 export default function Seminars() {
     const [seminarModalVisible, setSeminarModalVisible] = useState<boolean>(false);
@@ -25,6 +26,8 @@ export default function Seminars() {
     const [selectedMonth, setSelectedMonth] = useState('');
 
     const loadedCountRef = useRef(0);
+
+    const { showAdminPanel, setShowAdminPanel } = useAppContext();
 
     useEffect(() => {
         const LIMIT = 20;
@@ -201,6 +204,8 @@ export default function Seminars() {
             {selectedSeminar && seminarModalVisible && <SeminarDetailsModal setIsVisible={setSeminarModalVisible} selectedSeminar={selectedSeminar} handleSingleInquirySelection={handleSingleInquirySelection} />}
 
             {inquiryModalVisible && <InquiryModal setIsVisible={setInquiryModalVisible} selectedSeminarIds={selectedSeminar ? [selectedSeminar.id] : (selectedSeminarIds.length > 0 ? selectedSeminarIds : [])} handleRemoveId={handleRemoveId} />}
+
+            {showAdminPanel && <AdminModal setIsVisible={setShowAdminPanel} />}
 
             <section className="flex items-center flex-wrap gap-5 p-5 bg-[#f9fafb]">
                 <input type="text" placeholder="セミナーを検索..." className="min-w-[150px] border-[1px] border-[#ccc] text-[14px] text-[#111] rounded-[4px] p-2 w-full md:w-auto" value={searchText} onChange={handleSearchTextChange} />
