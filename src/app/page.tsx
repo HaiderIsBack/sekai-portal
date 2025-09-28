@@ -11,8 +11,6 @@ import SeminarDetailsModal from "@/components/SeminarDetailsModal";
 
 import FeaturedSeminarCards from "@/components/FeaturedSeminarCards";
 import InquiryModal from "@/components/InquiryModal";
-import { useAppContext } from "@/context/AppContext";
-import AdminModal from "@/components/AdminModal";
 
 const notoColorEmoji = Noto_Color_Emoji({
   subsets: [],
@@ -31,8 +29,6 @@ export default function Home() {
   const [selectedSeminar, setSelectedSeminar] = useState<Seminar | null>(null);
 
   const [isGeneralUse, setIsGeneralUse] = useState<boolean>(false);
-
-  const { showAdminPanel, setShowAdminPanel } = useAppContext();
 
   useEffect(() => {
       if (!inquiryModalVisible) {
@@ -72,7 +68,6 @@ export default function Home() {
           handleRemoveId={handleRemoveId}
         />
       )}
-      {showAdminPanel && <AdminModal setIsVisible={setShowAdminPanel} />}
 
       <section className="max-w-[1500px] mx-auto w-full flex flex-col justify-center items-center gap-4 py-[60px] px-[20px]">
         <h2 className="text-[20px] md:text-[32px] sm:text-[24px] font-bold mt-[26px]"><span className={notoColorEmoji.className}>🌏</span>世界を動かそう</h2>
