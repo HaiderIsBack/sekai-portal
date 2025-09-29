@@ -199,7 +199,7 @@ export default function Seminars() {
 
     return (
         <main className="w-full max-w-[1500px] mx-auto p-5">
-            { selectedSeminarIds.length > 0 && <Button type="primary" className="fixed bottom-[30px] right-[30px] rounded-full z-10" onClick={() => setInquiryModalVisible(true)}>一括で共催を相談する</Button> }
+            { selectedSeminarIds.length > 0 && <Button type="primary" className="fixed bottom-[20px] right-[20px] rounded-full z-10 py-[14px] px-[24px] leading-[1.6] text-[16px] shadow-2xl shadow-[rgba(0,0,0,0.6)]" onClick={() => setInquiryModalVisible(true)}>一括で共催を相談する</Button> }
 
             {selectedSeminar && seminarModalVisible && <SeminarDetailsModal setIsVisible={setSeminarModalVisible} selectedSeminar={selectedSeminar} handleSingleInquirySelection={handleSingleInquirySelection} />}
 
@@ -208,18 +208,18 @@ export default function Seminars() {
             {showAdminPanel && <AdminModal setIsVisible={setShowAdminPanel} />}
 
             <section className="flex items-center flex-wrap gap-5 p-5 bg-[#f9fafb]">
-                <input type="text" placeholder="セミナーを検索..." className="min-w-[150px] border-[1px] border-[#ccc] text-[14px] text-[#111] rounded-[4px] p-2 w-full md:w-auto" value={searchText} onChange={handleSearchTextChange} />
-                <select name="country" id="filter-country" className="min-w-[170px] border-[1px] border-[#ccc] text-[14px] text-[#111] rounded-[4px] p-2.5 w-full md:w-auto" value={selectedCountry} onChange={handleCountryChange}>
+                <input type="text" placeholder="セミナーを検索..." className="min-w-[195px] border-[1px] border-[#ccc] text-[14px] text-[#111] rounded-[4px] p-2 w-full md:w-auto" value={searchText} onChange={handleSearchTextChange} />
+                <select name="country" id="filter-country" className="min-w-[195px] border-[1px] border-[#ccc] text-[14px] text-[#111] rounded-[4px] p-2.5 w-full md:w-auto" value={selectedCountry} onChange={handleCountryChange}>
                     <option value="">国を選択</option>
                     <option value="USA">USA</option>
                     <option value="アメリカ">アメリカ</option>
                 </select>
-                <select name="category" id="filter-category" className="min-w-[170px] border-[1px] border-[#ccc] text-[14px] text-[#111] rounded-[4px] p-2.5 w-full md:w-auto" value={selectedCategory} onChange={handleCategoryChange}>
+                <select name="category" id="filter-category" className="min-w-[195px] border-[1px] border-[#ccc] text-[14px] text-[#111] rounded-[4px] p-2.5 w-full md:w-auto" value={selectedCategory} onChange={handleCategoryChange}>
                     <option value="">カテゴリを選択</option>
                     <option value="Technology">Technology</option>
                     <option value="キャリアとビジネス">キャリアとビジネス</option>
                 </select>
-                <select name="month" id="filter-month" className="min-w-[170px] border-[1px] border-[#ccc] text-[14px] text-[#111] rounded-[4px] p-2.5 w-full md:w-auto" value={selectedMonth} onChange={handleMonthChange}>
+                <select name="month" id="filter-month" className="min-w-[195px] border-[1px] border-[#ccc] text-[14px] text-[#111] rounded-[4px] p-2.5 w-full md:w-auto" value={selectedMonth} onChange={handleMonthChange}>
                     <option value="">月を選択</option>
                     <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
                     <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
@@ -250,9 +250,9 @@ const SeminarCardsList = ({ seminars, selectedSeminarIds, handleMultiSelect, han
         <section className="seminars-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-8">
             {
                 seminars && (
-                    seminars.map(seminar => {
+                    seminars.map((seminar, i) => {
                         return (
-                            <div className="relative group" key={seminar.id}>
+                            <div className="relative group" key={i + "-" + seminar.id}>
                                 <input type="checkbox" value={seminar.id} className="scale-150 duration-300 group-hover:-translate-y-1 absolute top-[20px] left-[20px] z-10 hover:cursor-pointer" onChange={handleMultiSelect} />
                                 <SeminarCard seminar={!seminar.image_name ? {...seminar, image_name: getImageSourceURL()} : seminar} handleSeminarSelection={handleSeminarSelection} />
                             </div>

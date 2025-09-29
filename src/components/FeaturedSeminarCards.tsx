@@ -44,8 +44,8 @@ const FeaturedSeminarCards = ({ handleSeminarSelection }: { handleSeminarSelecti
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px]">
       {
         seminars && (
-          seminars.map(seminar => (
-          <SeminarCard key={seminar.id} seminar={!seminar.image_name ? {...seminar, image_name: getImageSourceURL()} : seminar} handleSeminarSelection={handleSeminarSelection} />
+          seminars.map((seminar, i) => (
+          <SeminarCard key={i + "-" + seminar.id} seminar={!seminar.image_name ? {...seminar, image_name: getImageSourceURL()} : seminar} handleSeminarSelection={handleSeminarSelection} />
           ))
         )
       }

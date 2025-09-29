@@ -21,7 +21,7 @@ const notoColorEmoji = Noto_Color_Emoji({
 
 const Pill = ({ children }: { children: React.ReactNode }) => {
   return (
-    <span className="py-[10px] sm:py-[10px] px-4 sm:px-[20px] bg-[#f9f9f9] border-[1px] border-[#ddd] text-[12px] sm:text-[16px] rounded-[30px]">{children}</span>
+    <span className="py-[10px] sm:py-[10px] px-4 sm:px-[20px] bg-[#f9f9f9] border-[1px] border-[#ddd] text-[12px] sm:text-[16px] text-[#111] rounded-[30px]">{children}</span>
   );
 }
 
@@ -74,14 +74,14 @@ export default function Home() {
       )}
       {showAdminPanel && <AdminModal setIsVisible={setShowAdminPanel} />}
 
-      <section className="max-w-[1500px] mx-auto w-full flex flex-col justify-center items-center gap-4 py-[60px] px-[20px]">
+      <section className="max-w-[1500px] mx-auto w-full flex flex-col justify-center items-center gap-5 py-[60px] px-[20px]">
         <h2 className="text-[20px] md:text-[32px] sm:text-[24px] font-bold mt-[26px]"><span className={notoColorEmoji.className}>🌏</span>世界を動かそう</h2>
         <p className="text-[16px] sm:text-[18px] text-center">海外セミナーで登壇・共催し、新しい顧客とつながろう</p>
         <div className="w-full sm:w-fit flex items-center flex-col sm:flex-row gap-4 my-3">
           <Button type='primary' href='/seminars' className="w-full flex-1 sm:flex-auto sm:w-fit text-center sm:text-left">セミナーを探す</Button>
           <Button type='secondary' onClick={() => {setIsGeneralUse(true); setInquiryModalVisible(true);}} className="w-full flex-1 sm:flex-auto sm:w-fit text-center sm:text-left">相談する</Button>
         </div>
-        <div className="max-w-[100%] flex justify-center gap-2 sm:gap-4 flex-wrap">
+        <div className="max-w-[100%] flex justify-center gap-2 sm:gap-[12px] flex-wrap">
           <Pill>世界の舞台に立つ</Pill>
           <Pill>理想のクライアントと出会う</Pill>
           <Pill>影響力を強化する</Pill>
@@ -116,18 +116,18 @@ export default function Home() {
 
       <section className="max-w-[1500px] mx-auto py-[40px] px-[20px]">
         <h2 className="text-2xl mt-[24px] mb-[20px] font-bold">参加者の声</h2>
-        <div className="flex flex-col gap-3 bg-[#f9f9f9] p-[15px] rounded-[8px] mb-4">
-          <span className="text-[#fbbf24] text-[18px]">★★★★★</span>
+        <div className="flex flex-col gap-2 bg-[#f9f9f9] p-[15px] rounded-[8px] mb-2">
+          <span className="text-[#fbbf24] text-[20px]">★★★★★</span>
           <p className="text-[16px]">海外クライアントにつながるきっかけになりました</p>
         </div>
-        <div className="flex flex-col gap-3 bg-[#f9f9f9] p-[15px] rounded-[8px]">
-          <span className="text-[#fbbf24] text-[18px]">★★★★★</span>
+        <div className="flex flex-col gap-2 bg-[#f9f9f9] p-[15px] rounded-[8px]">
+          <span className="text-[#fbbf24] text-[20px]">★★★★★</span>
           <p className="text-[16px]">初めての海外登壇で大きな自信になりました</p>
         </div>
       </section>
 
       <section className="max-w-[1500px] mx-auto py-[40px] px-[20px]">
-        <h2 className="text-2xl mt-[24px] mb-[20px] font-bold">事例</h2>
+        <h2 className="text-2xl mt-[24px] mb-[22px] font-bold">事例</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-[20px]">
           <div className="rounded-[8px] overflow-hidden border-[1px] border-[#eee] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
             <Image src={"/images/hr_seminar.jpg"} alt="米国人事セミナー" className="w-full h-[160px] object-cover" width={910} height={670} />

@@ -135,10 +135,10 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
             if (setIsGeneralUse)
             setIsGeneralUse(false);
         }} />
-        <div className="fixed top-1/2 left-1/2 -translate-1/2 w-full max-w-[940px] h-[80vh] max-h-[600px] overflow-y-auto bg-white rounded-[10px] p-5 pt-0 z-30">
+        <div className="fixed top-1/2 left-1/2 -translate-1/2 w-full max-w-[940px] max-h-[80vh]  overflow-y-auto bg-white rounded-[10px] p-5 pt-0 z-30">
             <div className="sticky top-0 bg-white flex justify-between items-center border-b-[1px] border-[#ddd] pt-[20px] pb-[12px] mb-[12px]">
                 <h2 className="text-2xl font-bold">登壇・共催のご相談</h2>
-                <span className="text-[38px] hover:text-red-500 hover:cursor-pointer" onClick={() => {setIsVisible(false); setSelectedSeminars([]); if(setIsGeneralUse) {setIsGeneralUse(false)}}}>&times;</span>
+                <span className="text-[38px] text-[#666] hover:text-red-500 hover:cursor-pointer" onClick={() => {setIsVisible(false); setSelectedSeminars([]); if(setIsGeneralUse) {setIsGeneralUse(false)}}}>&times;</span>
             </div>
 
             {successModalVisible && <SuccessMessage setIsVisible={setIsVisible} />}
@@ -146,7 +146,7 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
 
             {loading && <div className="text-center py-[200px]">送信中...</div>}
 
-            {!successModalVisible && !errorModalVisible && !loading ? (<div className="p-3 my-2">
+            {!successModalVisible && !errorModalVisible && !loading ? (<div className="mt-[32px]">
                 {
                     isGeneralUse && (selectedSeminarIds?.length ?? 0) < 1 ? (
                     <div className="flex justify-between items-center flex-nowrap text-[16px] py-4 px-[15px] bg-[#f9fafb] border-[1px] border-[#e5e7eb] rounded-[8px] my-2.5">
@@ -157,11 +157,11 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
                     </div>) :
                     selectedSeminars && (
                         selectedSeminars.map(selectedSeminar => (
-                            <div key={selectedSeminar.id} className="flex justify-between items-center flex-nowrap text-[16px] py-4 px-[15px] bg-[#f9fafb] border-[1px] border-[#e5e7eb] rounded-[8px] my-2.5">
+                            <div key={selectedSeminar.id} className="flex justify-between items-center flex-nowrap text-[16px] py-[10px] px-[15px] bg-[#f9fafb] border-[1px] border-[#e5e7eb] rounded-[8px] my-2.5">
                                 <p>
                                     <span className={notoColorEmoji.className}>📌</span> <strong className="ml-1">{selectedSeminar.title}</strong> (<span className={notoColorEmoji.className}>{selectedSeminar.flag}</span> {selectedSeminar.country}・{FormattedDate(selectedSeminar.date)})
                                 </p>
-                                <span className="text-[26px] hover:text-red-500 hover:cursor-pointer" onClick={() => {handleRemoveId(selectedSeminar.id); selectedSeminarIds = selectedSeminarIds?.filter(i => i !== selectedSeminar.id); selectedSeminarIds && selectedSeminarIds?.length === 0 ? setIsVisible(false) : null; console.log(selectedSeminarIds)}}>&times;</span>
+                                <span className="text-[26px] text-[#9CA3AF] hover:text-red-500 hover:cursor-pointer" onClick={() => {handleRemoveId(selectedSeminar.id); selectedSeminarIds = selectedSeminarIds?.filter(i => i !== selectedSeminar.id); selectedSeminarIds && selectedSeminarIds?.length === 0 ? setIsVisible(false) : null;}}>&times;</span>
                             </div>
                         ))
                     )

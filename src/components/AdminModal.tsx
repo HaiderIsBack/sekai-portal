@@ -263,7 +263,7 @@ const AdminModal = ({ setIsVisible }: AdminModalProps) => {
     return (
     <>
         <div className="bg-gray-950/90 fixed top-0 left-0 w-full h-full z-20" onClick={() => setIsVisible(false)} />
-        <div className="fixed top-1/2 left-1/2 -translate-1/2 w-[90%] max-w-[800px] h-[80vh] max-h-[600px] overflow-y-auto bg-white rounded-[10px] p-8 pt-0 z-30">
+        <div className="fixed top-1/2 left-1/2 -translate-1/2 w-[90%] max-w-[800px] max-h-[80vh] overflow-y-auto bg-white rounded-[10px] p-8 pt-0 z-30">
             <div className="sticky top-0 bg-white flex justify-between items-center border-b-[1px] border-[#ddd] pt-[20px] pb-[18px] mb-[18px] z-40">
                 <h2 className="text-2xl font-bold"><span className={notoColorEmoji.className}>🛠️</span> 管理者パネル</h2>
                 <Button type="secondary" onClick={() => setIsVisible(false)}>
@@ -273,7 +273,7 @@ const AdminModal = ({ setIsVisible }: AdminModalProps) => {
 
            <div className="w-full flex flex-col items-start mt-4 mb-[15px] relative">
                 <label htmlFor="file-upload" className="text-[16px] text-[#333] font-bold mb-[5px]"><span className={notoColorEmoji.className}>📁</span><strong>セミナーデータ Excel アップロード</strong></label>
-                <input type="file" accept=".xlsx, .xls" name="file_upload" id="file-upload" className="w-full p-2.5 pl-[23px] border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px] hover:cursor-pointer" onChange={(e) => setFileInput(e.target.files)} />
+                <input type="file" accept=".xlsx, .xls" name="file_upload" id="file-upload" className="w-full p-2.5 pl-[28px] border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px] hover:cursor-pointer" onChange={(e) => setFileInput(e.target.files)} />
                 <Button type="primary" onClick={uploadExcel} className="mt-4">アップロード</Button>
                 <span className="absolute top-[39px] left-[10px] py-[1px] px-[6px] bg-[#f0f0f0] border-[1px] border-black rounded-sm text-[14px] pointer-events-none">Choose File</span>
             </div>
