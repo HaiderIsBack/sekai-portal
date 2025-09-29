@@ -85,7 +85,7 @@ const SeminarCard = ({ seminar, handleSeminarSelection }: SeminarCardProps) => {
     return (
         <div className="rounded-[8px] overflow-hidden border-[1px] border-[#eee] duration-300 hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] group-hover:-translate-y-1">
             <div className="w-full h-[160px] relative">
-                <img src={seminar.image_name ?? "/images/sekai-sample-img.jpg"} alt={seminar.title} loading="lazy" onError={(e) => { (e.target as HTMLImageElement).src = "/images/sekai-sample-img.jpg"; className="w-full h-full object-cover" }} />
+                <img src={seminar.image_name ?? "/images/sekai-sample-img.jpg"} alt={seminar.title} loading="lazy" onError={(e) => { (e.target as HTMLImageElement).src = "/images/sekai-sample-img.jpg"; }} className="w-full h-full object-cover" />
             </div>
             <div className="p-3 my-2">
                 <h3 className="text-[18px] font-bold text-[var(--primary)] hover:text-[var(--secondary)] duration-150 cursor-pointer detail-link">{seminar.title}</h3>
