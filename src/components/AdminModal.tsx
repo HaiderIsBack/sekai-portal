@@ -207,7 +207,7 @@ const AdminModal = ({ setIsVisible }: AdminModalProps) => {
                 event_type: "offline",
                 flag: "🇺🇸",
                 seminar_details: "This is a sample description for the tech conference.",
-                image_name: "your-image-name.jpg"
+                image_name: "/images/sekai-sample-img.jpg"
             }
         ];
         const ws = XLSX.utils.json_to_sheet(sampleData);
