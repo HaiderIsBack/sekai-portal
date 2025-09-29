@@ -38,7 +38,7 @@ const LoginPanel = ({ setIsVisible, setIsAuthenticated }: LoginPanelProps) => {
     return (
     <>
         <div className="bg-gray-950/50 fixed top-0 left-0 w-full h-full z-20" onClick={() => setIsVisible(false)} />
-        <div className="fixed top-1/2 left-1/2 -translate-1/2 w-full max-w-[400px] bg-white rounded-[10px] p-5 pt-0 z-30">
+        <div className="fixed top-1/2 left-1/2 -translate-1/2 w-[90%] max-w-[400px] bg-white rounded-[10px] p-5 pt-0 z-30">
             <div className="sticky top-0 bg-white flex justify-between items-center border-b-[1px] border-[#ddd] pt-[20px] pb-[12px] mb-[12px]">
                 <h2 className="text-2xl font-bold"><span className={notoColorEmoji.className}>🔐</span> 管理者ログイン</h2>
                 <span className="text-[38px] hover:text-red-500 hover:cursor-pointer" onClick={() => setIsVisible(false)}>&times;</span>
@@ -273,9 +273,9 @@ const AdminModal = ({ setIsVisible }: AdminModalProps) => {
 
            <div className="w-full flex flex-col items-start mt-4 mb-[15px] relative">
                 <label htmlFor="file-upload" className="text-[16px] text-[#333] font-bold mb-[5px]"><span className={notoColorEmoji.className}>📁</span><strong>セミナーデータ Excel アップロード</strong></label>
-                <input type="file" accept=".xlsx, .xls" name="file_upload" id="file-upload" className="w-full p-2.5 pl-[28px] border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px] hover:cursor-pointer" onChange={(e) => setFileInput(e.target.files)} />
+                <input type="file" accept=".xlsx, .xls" name="file_upload" id="file-upload" className="w-full p-2.5 pl-[22px] border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px] hover:cursor-pointer" onChange={(e) => setFileInput(e.target.files)} />
                 <Button type="primary" onClick={uploadExcel} className="mt-4">アップロード</Button>
-                <span className="absolute top-[39px] left-[10px] py-[1px] px-[6px] bg-[#f0f0f0] border-[1px] border-black rounded-sm text-[14px] pointer-events-none">Choose File</span>
+                <span className="absolute top-[39px] left-[10px] py-[1px] px-[6px] bg-[#f0f0f0] border-[1px] border-[#333] rounded-sm text-[14px] pointer-events-none">Choose File</span>
             </div>
 
             <span className="my-4 text-[16px]" ref={statusRef}></span>
@@ -284,7 +284,7 @@ const AdminModal = ({ setIsVisible }: AdminModalProps) => {
             <summary><strong><span className={notoColorEmoji.className}>📋</span> Excel フォーマット仕様（クリックして表示）</strong></summary>
             </details>
 
-            <div className="flex flex-wrap gap-2 my-4">
+            <div className="flex flex-wrap gap-5 my-4">
                 <Button type="secondary" className="w-full sm:w-fit" onClick={downloadSampleExcel}>
                     📥 サンプルExcelダウンロード
                 </Button>
@@ -300,7 +300,7 @@ const AdminModal = ({ setIsVisible }: AdminModalProps) => {
             </div>
 
             <div className="bg-[#f0f9ff] p-[15px] rounded-[8px] my-5">
-                <h4 className="my-4 font-bold text-[16px]">📊 現在のデータ状況</h4>
+                <h4 className="my-4 font-bold text-[16px]"><span className={notoColorEmoji.className}>📊</span> 現在のデータ状況</h4>
                 <p className="mb-4">{dataSummaryCount ? `現在、${dataSummaryCount}件のセミナーが登録されています。` : '読み込み中...'}</p>
             </div>
         </div>
