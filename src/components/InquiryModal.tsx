@@ -8,6 +8,7 @@ import emailjs from "emailjs-com";
 
 import { supabase } from "@/lib/supabaseClient";
 import Button from "./Button";
+import FormattedDate from "@/utils/formattedDate";
 
 const notoColorEmoji = Noto_Color_Emoji({
   subsets: [],
@@ -158,7 +159,7 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
                         selectedSeminars.map(selectedSeminar => (
                             <div key={selectedSeminar.id} className="flex justify-between items-center flex-nowrap text-[16px] py-4 px-[15px] bg-[#f9fafb] border-[1px] border-[#e5e7eb] rounded-[8px] my-2.5">
                                 <p>
-                                    <span className={notoColorEmoji.className}>📌</span> <strong className="ml-1">{selectedSeminar.title}</strong> (<span className={notoColorEmoji.className}>{selectedSeminar.flag}</span> ${selectedSeminar.country}・${selectedSeminar.date})
+                                    <span className={notoColorEmoji.className}>📌</span> <strong className="ml-1">{selectedSeminar.title}</strong> (<span className={notoColorEmoji.className}>{selectedSeminar.flag}</span> {selectedSeminar.country}・{FormattedDate(selectedSeminar.date)})
                                 </p>
                                 <span className="text-[26px] hover:text-red-500 hover:cursor-pointer" onClick={() => {handleRemoveId(selectedSeminar.id); selectedSeminarIds = selectedSeminarIds?.filter(i => i !== selectedSeminar.id); selectedSeminarIds && selectedSeminarIds?.length === 0 ? setIsVisible(false) : null; console.log(selectedSeminarIds)}}>&times;</span>
                             </div>

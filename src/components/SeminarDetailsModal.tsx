@@ -6,6 +6,7 @@ import Image from "next/image";
 import Button from "./Button";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import FormattedDate from "@/utils/formattedDate";
 
 const notoColorEmoji = Noto_Color_Emoji({
   subsets: [],
@@ -80,7 +81,7 @@ const SeminarDetailsModal = ({ setIsVisible, selectedSeminar, handleSingleInquir
                         <p className="text-[16px]"><span className={notoColorEmoji.className}>{selectedSeminar?.flag}</span> <strong>開催地:</strong> {selectedSeminar?.country}, {selectedSeminar?.city}</p>
                     </li>
                     <li className="my-4">
-                        <p className="text-[16px]"><span className={notoColorEmoji.className}>📅</span> <strong>開催日:</strong> {selectedSeminar?.date}</p>
+                        <p className="text-[16px]"><span className={notoColorEmoji.className}>📅</span> <strong>開催日:</strong> {FormattedDate(selectedSeminar?.date)}</p>
                     </li>
                     <li className="my-4">
                         <p className="text-[16px]"><span className={notoColorEmoji.className}>👥</span> <strong>参加予定:</strong> {selectedSeminar?.participants}</p>
