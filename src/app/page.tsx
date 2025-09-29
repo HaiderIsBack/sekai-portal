@@ -117,11 +117,11 @@ export default function Home() {
       <section className="max-w-[1500px] mx-auto py-[40px] px-[20px]">
         <h2 className="text-2xl mt-[24px] mb-[20px] font-bold">参加者の声</h2>
         <div className="flex flex-col gap-3 bg-[#f9f9f9] p-[15px] rounded-[8px] mb-4">
-          <span className="text-[#fbbf24]">★★★★★</span>
+          <span className="text-[#fbbf24] text-[18px]">★★★★★</span>
           <p className="text-[16px]">海外クライアントにつながるきっかけになりました</p>
         </div>
         <div className="flex flex-col gap-3 bg-[#f9f9f9] p-[15px] rounded-[8px]">
-          <span className="text-[#fbbf24]">★★★★★</span>
+          <span className="text-[#fbbf24] text-[18px]">★★★★★</span>
           <p className="text-[16px]">初めての海外登壇で大きな自信になりました</p>
         </div>
       </section>
