@@ -8,6 +8,7 @@ import emailjs from "emailjs-com";
 
 import { supabase } from "@/lib/supabaseClient";
 import Button from "./Button";
+import Image from "next/image";
 import FormattedDate from "@/utils/formattedDate";
 
 const notoColorEmoji = Noto_Color_Emoji({
@@ -160,8 +161,8 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, setSelectedSeminar, ha
                     selectedSeminars && (
                         selectedSeminars.map(selectedSeminar => (
                             <div key={selectedSeminar.id} className="flex justify-between items-center flex-nowrap text-[16px] py-[10px] px-[15px] bg-[#f9fafb] border-[1px] border-[#e5e7eb] rounded-[8px] my-2.5">
-                                <p>
-                                    <span className={notoColorEmoji.className}>📌</span> <strong className="ml-1">{selectedSeminar.title}</strong> (<span className={notoColorEmoji.className}>{selectedSeminar.flag}</span> {selectedSeminar.country}・{FormattedDate(selectedSeminar.date)})
+                                <p className="flex items-center gap-2">
+                                    <Image src={"/images/pin.png"} alt="Pin Icon" width={18} height={18} /> <strong className="ml-1">{selectedSeminar.title}</strong> (<span className={notoColorEmoji.className}>{selectedSeminar.flag}</span> {selectedSeminar.country}・{FormattedDate(selectedSeminar.date)})
                                 </p>
                                 <span className="text-[26px] text-[#9CA3AF] hover:text-red-500 hover:cursor-pointer" onClick={() => {handleRemoveId(selectedSeminar.id); selectedSeminarIds = selectedSeminarIds?.filter(i => i !== selectedSeminar.id); selectedSeminarIds && selectedSeminarIds?.length === 0 ? setIsVisible(false) : null;}}>&times;</span>
                             </div>

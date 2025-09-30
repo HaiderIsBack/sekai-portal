@@ -1,7 +1,7 @@
 import { Noto_Color_Emoji } from "next/font/google";
 import Button from "./Button";
 import { Seminar } from "@/types/Seminar";
-import { useMemo } from "react";
+import Image from "next/image";
 import FormattedDate from "@/utils/formattedDate";
 
 const notoColorEmoji = Noto_Color_Emoji({
@@ -15,7 +15,9 @@ type SeminarCardProps = {
 }
 
 const SeminarCard = ({ seminar, handleSeminarSelection }: SeminarCardProps) => {
-    const eventTypeIcon = seminar.event_type === 'online' ? '💻' : '📍';
+    const eventTypeIcon = seminar.event_type === 'online' ? 
+        (<Image src={"/images/laptop.png"} alt="Laptop Icon" width={14} height={14} />) : 
+        (<Image src={"/images/pin-2.png"} alt="Pin 2 Icon" width={18} height={18} className="-mt-[4px] -mr-[2px]" />);
     
     return (
         <div className="rounded-[8px] overflow-hidden border-[1px] border-[#eee] duration-300 hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] group-hover:-translate-y-1">
@@ -29,13 +31,13 @@ const SeminarCard = ({ seminar, handleSeminarSelection }: SeminarCardProps) => {
                         <p className="text-[16px] text-[#555]"><span className={notoColorEmoji.className}>{seminar.flag}</span> {seminar.country}, {seminar.city}</p>
                     </li>
                     <li className="my-2">
-                        <p className="text-[16px] text-[#555]"><span className={notoColorEmoji.className}>📅</span> {FormattedDate(seminar.date)}</p>
+                        <p className="text-[16px] text-[#555] flex gap-2 items-center"><Image src={"/images/calendar.png"} alt="Calendar Icon" width={18} height={18} /> {FormattedDate(seminar.date)}</p>
                     </li>
                     <li className="my-2">
-                        <p className="text-[16px] text-[#555]"><span className={notoColorEmoji.className}>👥</span> {seminar.participants}名参加予定</p>
+                        <p className="text-[16px] text-[#555] flex gap-2 items-center"><Image src={"/images/group.png"} alt="People Icon" width={18} height={18} /> {seminar.participants}名参加予定</p>
                     </li>
                     <li className="my-2">
-                        <span className={`${seminar.event_type === 'online' ? 'bg-[#dbeafe]' : 'bg-[#dcfce7]'} ${seminar.event_type === 'online' ? 'text-[#1e40af]' : 'text-[#166534]'} text-[12px] leading-[1.6] py-1 px-2 rounded-full`}><span className={notoColorEmoji.className}>{eventTypeIcon}</span> {seminar.event_type === 'online' ? 'オンライン': '現地'}</span>
+                        <span className={`${seminar.event_type === 'online' ? 'bg-[#dbeafe]' : 'bg-[#dcfce7]'} ${seminar.event_type === 'online' ? 'text-[#1e40af]' : 'text-[#166534]'} text-[12px] leading-[1.6] py-1 px-2 rounded-full inline-flex items-center gap-2`}>{eventTypeIcon} {seminar.event_type === 'online' ? 'オンライン': '現地'}</span>
                     </li>
                 </ul>
                 <Button type='primary' href='' onClick={() => handleSeminarSelection(seminar)}>詳細を見る</Button>
