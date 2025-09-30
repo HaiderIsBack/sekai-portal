@@ -17,6 +17,7 @@ export default function Seminars() {
     const [seminars, setSeminars] = useState<Seminar[]>([]);
     const [selectedSeminar, setSelectedSeminar] = useState<Seminar | null>(null);
     const [selectedSeminarIds, setSelectedSeminarIds] = useState<number[]>([]);
+    const [noMoreSeminars, setNoMoreSeminars] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
 
     // Filters states
@@ -33,6 +34,8 @@ export default function Seminars() {
         const LIMIT = 20;
 
         const fetchSeminars = async (offset: number = 0) => {
+            if (noMoreSeminars) return;
+
             setLoading(true);
             let query = supabase
                 .from("seminars")
@@ -70,8 +73,14 @@ export default function Seminars() {
                 setLoading(false);
                 return;
             }
+
+            console.log("No error");
     
             if (data) {
+                console.log(console.log(data));
+                if (data.length < 1) {
+                    setNoMoreSeminars(true);
+                }
                 // TODO:Delete this line
                 // data.shift();
                 // data.shift();
@@ -103,7 +112,7 @@ export default function Seminars() {
         }
 
         const handleScroll = throttle(() => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !loading) {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !loading && !noMoreSeminars) {
                 fetchSeminars(loadedCountRef.current);
             }
         }, 200);
