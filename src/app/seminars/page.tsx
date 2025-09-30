@@ -203,7 +203,7 @@ export default function Seminars() {
 
             {selectedSeminar && seminarModalVisible && <SeminarDetailsModal setIsVisible={setSeminarModalVisible} selectedSeminar={selectedSeminar} handleSingleInquirySelection={handleSingleInquirySelection} />}
 
-            {inquiryModalVisible && <InquiryModal setIsVisible={setInquiryModalVisible} selectedSeminarIds={selectedSeminar ? [selectedSeminar.id] : (selectedSeminarIds.length > 0 ? selectedSeminarIds : [])} handleRemoveId={handleRemoveId} />}
+            {inquiryModalVisible && <InquiryModal setIsVisible={setInquiryModalVisible} selectedSeminarIds={selectedSeminar ? [selectedSeminar.id] : (selectedSeminarIds.length > 0 ? selectedSeminarIds : [])} setSelectedSeminar={setSelectedSeminar} handleRemoveId={handleRemoveId} />}
 
             {showAdminPanel && <AdminModal setIsVisible={setShowAdminPanel} />}
 

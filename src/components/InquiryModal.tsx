@@ -1,6 +1,6 @@
 "use client";
 
-import { SeminarInfo } from "@/types/Seminar";
+import { Seminar, SeminarInfo } from "@/types/Seminar";
 import { Noto_Color_Emoji } from "next/font/google";
 import { FormEventHandler, useEffect, useState } from "react";
 
@@ -18,12 +18,13 @@ const notoColorEmoji = Noto_Color_Emoji({
 type InquiryModalProps = {
     setIsVisible: (inquiryModalVisible: boolean) => void;
     selectedSeminarIds?: number[];
+    setSelectedSeminar: (seminar: Seminar | null) => void;
     isGeneralUse?: boolean;
     setIsGeneralUse?: (isGeneralUse: boolean) => void;
     handleRemoveId: (id: number) => void;
 }
 
-const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGeneralUse, setIsGeneralUse }: InquiryModalProps) => {
+const InquiryModal = ({ setIsVisible, selectedSeminarIds, setSelectedSeminar, handleRemoveId, isGeneralUse, setIsGeneralUse }: InquiryModalProps) => {
     const [selectedSeminars, setSelectedSeminars] = useState<SeminarInfo[]>([]);
     const [successModalVisible, setSuccessModalVisible] = useState<boolean>(false);
     const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
@@ -132,13 +133,14 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, handleRemoveId, isGene
         <div className="bg-gray-950/30 fixed top-0 left-0 w-full h-full z-20" onClick={() => {
             setIsVisible(false); 
             setSelectedSeminars([]);
+            setSelectedSeminar(null);
             if (setIsGeneralUse)
             setIsGeneralUse(false);
         }} />
         <div className="fixed top-1/2 left-1/2 -translate-1/2 w-full max-w-[940px] max-h-[80vh]  overflow-y-auto bg-white rounded-[10px] p-5 pt-0 z-30">
             <div className="sticky top-0 bg-white flex justify-between items-center border-b-[1px] border-[#ddd] pt-[20px] pb-[12px] mb-[12px]">
                 <h2 className="text-2xl font-bold">登壇・共催のご相談</h2>
-                <span className="text-[38px] text-[#666] hover:text-red-500 hover:cursor-pointer" onClick={() => {setIsVisible(false); setSelectedSeminars([]); if(setIsGeneralUse) {setIsGeneralUse(false)}}}>&times;</span>
+                <span className="text-[38px] text-[#666] hover:text-red-500 hover:cursor-pointer" onClick={() => {setIsVisible(false); setSelectedSeminars([]); setSelectedSeminar(null); if(setIsGeneralUse) {setIsGeneralUse(false)}}}>&times;</span>
             </div>
 
             {successModalVisible && <SuccessMessage setIsVisible={setIsVisible} />}

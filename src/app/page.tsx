@@ -68,6 +68,7 @@ export default function Home() {
         <InquiryModal
           setIsVisible={setInquiryModalVisible}
           isGeneralUse={isGeneralUse}
+          setSelectedSeminar={setSelectedSeminar}
           selectedSeminarIds={selectedSeminar ? [selectedSeminar.id] : []}
           handleRemoveId={handleRemoveId}
         />

@@ -23,7 +23,7 @@ const SeminarCard = ({ seminar, handleSeminarSelection }: SeminarCardProps) => {
                 <img src={seminar.image_name ?? "/images/sekai-sample-img.jpg"} alt={seminar.title} loading="lazy" onError={(e) => { (e.target as HTMLImageElement).src = "/images/sekai-sample-img.jpg"; }} className="w-full h-full object-cover" />
             </div>
             <div className="p-3 my-2">
-                <h3 className="text-[18px] leading-[1.3] font-bold text-[var(--primary)] hover:text-[var(--secondary)] duration-150 cursor-pointer detail-link">{seminar.title}</h3>
+                <h3 className="text-[18px] leading-[1.3] font-bold text-[var(--primary)] hover:text-[var(--secondary)] duration-150 cursor-pointer detail-link" onClick={() => handleSeminarSelection(seminar)}>{seminar.title}</h3>
                 <ul className="mt-2.5 mb-[44px]">
                     <li className="my-2">
                         <p className="text-[16px] text-[#555]"><span className={notoColorEmoji.className}>{seminar.flag}</span> {seminar.country}, {seminar.city}</p>
