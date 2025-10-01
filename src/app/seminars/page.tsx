@@ -156,24 +156,28 @@ export default function Seminars() {
     const handleSearchTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         loadedCountRef.current = 0;
         setSeminars([]);
+        setSelectedSeminarIds([]);
         setSearchText(e.target.value);
     }
 
     const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         loadedCountRef.current = 0;
         setSeminars([]);
+        setSelectedSeminarIds([]);
         setSelectedCountry(e.target.value);
     }
 
     const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         loadedCountRef.current = 0;
         setSeminars([]);
+        setSelectedSeminarIds([]);
         setSelectedCategory(e.target.value);
     }
 
     const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         loadedCountRef.current = 0;
         setSeminars([]);
+        setSelectedSeminarIds([]);
         setSelectedMonth(e.target.value);
     }
 
