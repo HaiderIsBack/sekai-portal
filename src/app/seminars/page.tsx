@@ -200,6 +200,14 @@ export default function Seminars() {
     } 
 
     const seminarCards = useMemo(() => {
+        if (seminars.length < 1) {
+            return (
+                <div className="py-[50px] text-center">
+                    <h3 className="text-gray-500">検索条件に一致するセミナーが見つかりませんでした。</h3>
+                </div>
+            );
+        }
+
         return <SeminarCardsList seminars={seminars} handleMultiSelect={handleMultiSelect} handleSeminarSelection={handleSeminarSelection} />
     }, [seminars]);
 
