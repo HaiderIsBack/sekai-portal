@@ -41,6 +41,9 @@ export default function Home() {
   }, [inquiryModalVisible]);
 
   const handleSeminarSelection = (seminar: Seminar) => {
+    if (setIsGeneralUse !== undefined) {
+      setIsGeneralUse(false);
+    }
     setSelectedSeminar(seminar);
     setSeminarModalVisible(true);
   }
