@@ -173,7 +173,7 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, setSelectedSeminar, ha
                                 <p>
                                     <strong><Image src={"/images/pin.png"} alt="Pin Icon" width={18} height={18} className="inline-block mr-2" /> {selectedSeminar.title}</strong> <span>( <Image src={"/images/flag.png"} alt="Flag Icon" width={18} height={18} className="inline-block" /> {selectedSeminar.country}・{FormattedDate(selectedSeminar.date)} )</span>
                                 </p>
-                                <span className="text-[26px] text-[#9CA3AF] hover:text-red-500 hover:cursor-pointer" onClick={() => handleTabClose(selectedSeminar)}>&times;</span>
+                                <span className="text-[26px] text-[#9CA3AF] hover:text-red-500 hover:cursor-pointer ml-2" onClick={() => handleTabClose(selectedSeminar)}>&times;</span>
                             </div>
                         ))
                     )
