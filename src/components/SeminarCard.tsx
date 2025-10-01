@@ -28,7 +28,7 @@ const SeminarCard = ({ seminar, handleSeminarSelection }: SeminarCardProps) => {
                 <h3 className="text-[18px] leading-[1.3] font-bold text-[var(--primary)] hover:text-[var(--secondary)] duration-150 cursor-pointer detail-link" onClick={() => handleSeminarSelection(seminar)}>{seminar.title}</h3>
                 <ul className="mt-2.5 mb-[44px]">
                     <li className="my-2">
-                        <p className="text-[16px] text-[#555]"><span className={notoColorEmoji.className}>{seminar.flag}</span> {seminar.country}, {seminar.city}</p>
+                        <p className="text-[16px] text-[#555] flex gap-2 items-center"><Image src={"/images/flag.png"} alt="Flag Icon" width={18} height={18} /> {seminar.country}, {seminar.city}</p>
                     </li>
                     <li className="my-2">
                         <p className="text-[16px] text-[#555] flex gap-2 items-center"><Image src={"/images/calendar.png"} alt="Calendar Icon" width={18} height={18} /> {FormattedDate(seminar.date)}</p>

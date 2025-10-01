@@ -4,6 +4,7 @@ import { FormEventHandler, useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import * as XLSX from "xlsx";
 import Button from "./Button";
+import Image from "next/image";
 
 const notoColorEmoji = Noto_Color_Emoji({
   subsets: [],
@@ -40,7 +41,7 @@ const LoginPanel = ({ setIsVisible, setIsAuthenticated }: LoginPanelProps) => {
         <div className="bg-gray-950/50 fixed top-0 left-0 w-full h-full z-20" onClick={() => setIsVisible(false)} />
         <div className="fixed top-1/2 left-1/2 -translate-1/2 w-[90%] max-w-[400px] bg-white rounded-[10px] p-5 pt-0 z-30">
             <div className="sticky top-0 bg-white flex justify-between items-center border-b-[1px] border-[#ddd] pt-[20px] pb-[12px] mb-[12px]">
-                <h2 className="text-2xl font-bold"><span className={notoColorEmoji.className}>🔐</span> 管理者ログイン</h2>
+                <h2 className="text-2xl font-bold flex items-center gap-2"><Image src={"/images/lock.png"} alt="Lock Icon" width={18} height={18} /> 管理者ログイン</h2>
                 <span className="text-[38px] hover:text-red-500 hover:cursor-pointer" onClick={() => setIsVisible(false)}>&times;</span>
             </div>
 
@@ -265,15 +266,15 @@ const AdminModal = ({ setIsVisible }: AdminModalProps) => {
         <div className="bg-gray-950/90 fixed top-0 left-0 w-full h-full z-20" onClick={() => setIsVisible(false)} />
         <div className="fixed top-1/2 left-1/2 -translate-1/2 w-[90%] max-w-[800px] max-h-[80vh] overflow-y-auto bg-white rounded-[10px] p-8 pt-0 z-30">
             <div className="sticky top-0 bg-white flex justify-between items-center border-b-[1px] border-[#ddd] pt-[20px] pb-[18px] mb-[18px] z-40">
-                <h2 className="text-2xl font-bold"><span className={notoColorEmoji.className}>🛠️</span> 管理者パネル</h2>
+                <h2 className="text-2xl font-bold flex items-center gap-2"><Image src={"/images/under-construction.png"} alt="Lock Icon" width={24} height={24} /> 管理者パネル</h2>
                 <Button type="secondary" onClick={() => setIsVisible(false)}>
                     ✕ 閉じる
                 </Button>
             </div>
 
            <div className="w-full flex flex-col items-start mt-4 mb-[15px] relative">
-                <label htmlFor="file-upload" className="text-[16px] text-[#333] font-bold mb-[5px]"><span className={notoColorEmoji.className}>📁</span><strong>セミナーデータ Excel アップロード</strong></label>
-                <input type="file" accept=".xlsx, .xls" name="file_upload" id="file-upload" className="w-full p-2.5 pl-[22px] border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px] hover:cursor-pointer" onChange={(e) => setFileInput(e.target.files)} />
+                <label htmlFor="file-upload" className="text-[16px] text-[#333] font-bold mb-[5px] flex items-center gap-2"><Image src={"/images/folder.png"} alt="Folder Icon" width={16} height={16} /><strong>セミナーデータ Excel アップロード</strong></label>
+                <input type="file" accept=".xlsx, .xls" name="file_upload" id="file-upload" className="w-full p-2.5 pl-[26px] border-[1px] border-[#ddd] focus:outline-[1px] focus:outline-[var(--primary)] text-[14px] rounded-[4px] hover:cursor-pointer" onChange={(e) => setFileInput(e.target.files)} />
                 <Button type="primary" onClick={uploadExcel} className="mt-4">アップロード</Button>
                 <span className="absolute top-[39px] left-[10px] py-[1px] px-[6px] bg-[#f0f0f0] border-[1px] border-[#333] rounded-sm text-[14px] pointer-events-none">Choose File</span>
             </div>
@@ -281,26 +282,26 @@ const AdminModal = ({ setIsVisible }: AdminModalProps) => {
             <span className="my-4 text-[16px]" ref={statusRef}></span>
 
             <details className="bg-[#f9fafb] my-5 p-[15px] rounded-[8px]">
-            <summary><strong><span className={notoColorEmoji.className}>📋</span> Excel フォーマット仕様（クリックして表示）</strong></summary>
+            <summary><Image src={"/images/clipboard.png"} alt="Clipboard Icon" width={18} height={18} className="-translate-y-[2px] inline-block" /> Excel フォーマット仕様（クリックして表示）</summary>
             </details>
 
             <div className="flex flex-wrap gap-5 my-4">
                 <Button type="secondary" className="w-full sm:w-fit" onClick={downloadSampleExcel}>
-                    📥 サンプルExcelダウンロード
+                    <Image src={"/images/download.png"} alt="Download Icon" width={12} height={12} className="inline-block mr-2" /> サンプルExcelダウンロード
                 </Button>
                 <Button type="secondary" className="w-full sm:w-fit" onClick={exportCurrentData}>
-                    📤 現在のデータをエクスポート
+                    <Image src={"/images/upload.png"} alt="Upload Icon" width={12} height={12} className="inline-block mr-2" /> 現在のデータをエクスポート
                 </Button>
                 <Button type="secondary" className="w-full sm:w-fit" onClick={refreshData}>
-                    🔄 データ更新
+                    <Image src={"/images/loading-arrow.png"} alt="Loading Arrow Icon" width={12} height={12} className="inline-block mr-2" /> データ更新
                 </Button>
                 <Button type="danger" className="w-full sm:w-fit" onClick={deleteAllData}>
-                    🗑️ 全データクリア
+                    <Image src={"/images/bin.png"} alt="Bin Icon" width={12} height={12} className="inline-block mr-2" /> 全データクリア
                 </Button>
             </div>
 
             <div className="bg-[#f0f9ff] p-[15px] rounded-[8px] my-5">
-                <h4 className="my-4 font-bold text-[16px]"><span className={notoColorEmoji.className}>📊</span> 現在のデータ状況</h4>
+                <h4 className="my-4 font-bold text-[16px]"><Image src={"/images/growth.png"} alt="Growth Icon" width={14} height={14} className="inline-block mr-2" /> 現在のデータ状況</h4>
                 <p className="mb-4">{dataSummaryCount ? `現在、${dataSummaryCount}件のセミナーが登録されています。` : '読み込み中...'}</p>
             </div>
         </div>

@@ -161,8 +161,8 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, setSelectedSeminar, ha
                     selectedSeminars && (
                         selectedSeminars.map(selectedSeminar => (
                             <div key={selectedSeminar.id} className="flex justify-between items-center flex-nowrap text-[16px] py-[10px] px-[15px] bg-[#f9fafb] border-[1px] border-[#e5e7eb] rounded-[8px] my-2.5">
-                                <p className="flex items-center gap-2">
-                                    <Image src={"/images/pin.png"} alt="Pin Icon" width={18} height={18} /> <strong className="ml-1">{selectedSeminar.title}</strong> (<span className={notoColorEmoji.className}>{selectedSeminar.flag}</span> {selectedSeminar.country}・{FormattedDate(selectedSeminar.date)})
+                                <p className="flex flex-wrap items-center gap-2">
+                                    <strong><Image src={"/images/pin.png"} alt="Pin Icon" width={18} height={18} className="inline-block mr-2" /> {selectedSeminar.title}</strong> (<Image src={"/images/flag.png"} alt="Flag Icon" width={18} height={18} /> {selectedSeminar.country}・{FormattedDate(selectedSeminar.date)})
                                 </p>
                                 <span className="text-[26px] text-[#9CA3AF] hover:text-red-500 hover:cursor-pointer" onClick={() => {handleRemoveId(selectedSeminar.id); selectedSeminarIds = selectedSeminarIds?.filter(i => i !== selectedSeminar.id); selectedSeminarIds && selectedSeminarIds?.length === 0 ? setIsVisible(false) : null;}}>&times;</span>
                             </div>

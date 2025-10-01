@@ -78,7 +78,7 @@ const SeminarDetailsModal = ({ setIsVisible, selectedSeminar, handleSingleInquir
                 <h3 className="text-[24px] font-bold text-[#111] cursor-pointer mt-[24px] mb-[18px]">{selectedSeminar?.title}</h3>
                 <ul className="mt-8 mb-[44px]">
                     <li className="my-4">
-                        <p className="text-[16px] text-[#111] flex gap-2 items-center"><span className={notoColorEmoji.className}>{selectedSeminar?.flag}</span> <strong>開催地:</strong> {selectedSeminar?.country}, {selectedSeminar?.city}</p>
+                        <p className="text-[16px] text-[#111] flex gap-2 items-center"><Image src={"/images/flag.png"} alt="Flag Icon" width={18} height={18} /> <strong>開催地:</strong> {selectedSeminar?.country}, {selectedSeminar?.city}</p>
                     </li>
                     <li className="my-4">
                         <p className="text-[16px] text-[#111] flex gap-2 items-center"><Image src={"/images/calendar.png"} alt="Calendar Icon" width={18} height={18} /> <strong>開催日:</strong> {FormattedDate(selectedSeminar?.date)}</p>

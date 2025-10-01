@@ -30,74 +30,71 @@ export default function Seminars() {
 
     const { showAdminPanel, setShowAdminPanel } = useAppContext();
 
-    useEffect(() => {
-        const LIMIT = 20;
+    const LIMIT = 20;
 
-        const fetchSeminars = async (offset: number = 0) => {
-            if (noMoreSeminars) return;
+    const fetchSeminars = async (offset: number = 0) => {
+        if (noMoreSeminars) return;
 
-            setLoading(true);
-            let query = supabase
-                .from("seminars")
-                .select('id, title, country, city, date, participants, category, event_type, flag, image_name, created_at');
+        setLoading(true);
+        let query = supabase
+            .from("seminars")
+            .select('id, title, country, city, date, participants, category, event_type, flag, image_name, created_at');
 
-            if (searchText) {
-                query = query.ilike('title', `%${searchText}%`);  // Case-insensitive LIKE
-            }
-
-            if (selectedCountry) {
-                query = query.eq('country', selectedCountry);
-            }
-
-            if (selectedCategory) {
-                query = query.eq('category', selectedCategory);
-            }
-
-            const monthNames = [
-            "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-            ];
-
-            if (selectedMonth) {
-                const monthName = monthNames[parseInt(selectedMonth) - 1];
-                query = query.ilike('date', `%${monthName}%`);
-            }
-
-            const { data, error } = await query
-                .order('created_at', { ascending: false })
-                .range(offset, offset + LIMIT);
-
-    
-            if (error) {
-                alert(error.message);
-                setLoading(false);
-                return;
-            }
-
-            console.log("No error");
-    
-            if (data) {
-                console.log(console.log(data));
-                if (data.length < 1) {
-                    setNoMoreSeminars(true);
-                }
-                // TODO:Delete this line
-                // data.shift();
-                // data.shift();
-                // data.shift();
-
-                // console.log(offset, data.length, loadedCount);
-                loadedCountRef.current = loadedCountRef.current + LIMIT - 1;
-                if (offset === 0) {
-                    setSeminars(data);
-                } else {
-                    setSeminars(prev => [...prev, ...data]);
-                }
-            }
-            setLoading(false);
+        if (searchText) {
+            query = query.ilike('title', `%${searchText}%`);  // Case-insensitive LIKE
         }
-        fetchSeminars(0);
 
+        if (selectedCountry) {
+            query = query.eq('country', selectedCountry);
+        }
+
+        if (selectedCategory) {
+            query = query.eq('category', selectedCategory);
+        }
+
+        const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+        ];
+
+        if (selectedMonth) {
+            const monthName = monthNames[parseInt(selectedMonth) - 1];
+            query = query.ilike('date', `%${monthName}%`);
+        }
+
+        const { data, error } = await query
+            .order('created_at', { ascending: false })
+            .range(offset, offset + LIMIT);
+
+
+        if (error) {
+            alert(error.message);
+            setLoading(false);
+            return;
+        }
+
+        if (data) {
+            if (data.length < 1) {
+                setNoMoreSeminars(true);
+            }
+
+            loadedCountRef.current = offset + data.length;
+            if (offset === 0) {
+                setSeminars(data);
+            } else {
+                setSeminars(prev => [...prev, ...data]);
+            }
+        }
+        setLoading(false);
+    }
+
+    useEffect(() => {
+        setNoMoreSeminars(false);
+        loadedCountRef.current = 0;
+        fetchSeminars(0);
+    }, [searchText, selectedCountry, selectedCategory, selectedMonth]);
+
+    useEffect(() => {
         function throttle<T extends (...args: ((e: Event) => void)[]) => void>(func: T, limit: number): (...args: Parameters<T>) => void {
             let inThrottle = false;
             return (...args: Parameters<T>) => {
@@ -122,7 +119,7 @@ export default function Seminars() {
         return () => {
             window.removeEventListener('scroll', handleScroll);
         }
-    }, [searchText, selectedCountry, selectedCategory, selectedMonth]);
+    }, []);
 
     useEffect(() => {
         if (!inquiryModalVisible) {
@@ -203,12 +200,12 @@ export default function Seminars() {
     } 
 
     const seminarCards = useMemo(() => {
-        return <SeminarCardsList seminars={seminars} selectedSeminarIds={selectedSeminarIds} handleMultiSelect={handleMultiSelect} handleSeminarSelection={handleSeminarSelection} />
+        return <SeminarCardsList seminars={seminars} handleMultiSelect={handleMultiSelect} handleSeminarSelection={handleSeminarSelection} />
     }, [seminars]);
 
     return (
         <main className="w-full max-w-[1500px] mx-auto p-5">
-            { selectedSeminarIds.length > 0 && <Button type="primary" className="fixed bottom-[20px] right-[20px] rounded-full z-10 py-[14px] px-[24px] leading-[1.6] text-[16px] shadow-2xl shadow-[rgba(0,0,0,0.6)]" onClick={() => setInquiryModalVisible(true)}>一括で共催を相談する</Button> }
+            { selectedSeminarIds.length > 0 && <Button type="primary" className="fixed bottom-[20px] right-[20px] rounded-full z-10 py-[14px] px-[24px] leading-[1.6] text-[16px] shadow-[0_4px_10px_rgba(0,0,0,0.2)]" onClick={() => setInquiryModalVisible(true)}>一括で共催を相談する</Button> }
 
             {selectedSeminar && seminarModalVisible && <SeminarDetailsModal setIsVisible={setSeminarModalVisible} selectedSeminar={selectedSeminar} handleSingleInquirySelection={handleSingleInquirySelection} />}
 
@@ -248,12 +245,11 @@ export default function Seminars() {
 
 type SeminarCardsListProps = {
     seminars: Seminar[];
-    selectedSeminarIds: number[];
     handleMultiSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleSeminarSelection: (seminar: Seminar) => void;
 }
 
-const SeminarCardsList = ({ seminars, selectedSeminarIds, handleMultiSelect, handleSeminarSelection }: SeminarCardsListProps) => {
+const SeminarCardsList = ({ seminars, handleMultiSelect, handleSeminarSelection }: SeminarCardsListProps) => {
     const { getImageSourceURL } = useAppContext();
     return (
         <section className="seminars-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-8">
