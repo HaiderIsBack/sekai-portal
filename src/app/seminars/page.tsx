@@ -121,16 +121,16 @@ export default function Seminars() {
         }
     }, []);
 
-    useEffect(() => {
-        if (!inquiryModalVisible) {
-            setSelectedSeminarIds([]);
-            const inputCheckboxes = document.querySelectorAll("input[type='checkbox']");
+    // useEffect(() => {
+    //     if (!inquiryModalVisible) {
+    //         setSelectedSeminarIds([]);
+    //         const inputCheckboxes = document.querySelectorAll("input[type='checkbox']");
 
-            inputCheckboxes.forEach(e => {
-                (e as HTMLInputElement).checked = false;
-            });
-        }
-    }, [inquiryModalVisible]);
+    //         inputCheckboxes.forEach(e => {
+    //             (e as HTMLInputElement).checked = false;
+    //         });
+    //     }
+    // }, [inquiryModalVisible]);
 
     const handleSeminarSelection = (seminar: Seminar) => {
         setSelectedSeminar(seminar);
@@ -258,7 +258,7 @@ const SeminarCardsList = ({ seminars, handleMultiSelect, handleSeminarSelection 
                     seminars.map((seminar, i) => {
                         return (
                             <div className="relative group" key={i + "-" + seminar.id}>
-                                <input type="checkbox" value={seminar.id} className="scale-150 duration-300 group-hover:-translate-y-1 absolute top-[20px] left-[20px] z-10 hover:cursor-pointer" onChange={handleMultiSelect} />
+                                <input type="checkbox" value={seminar.id} className="scale-150 duration-300 group-hover:-translate-y-1 absolute top-[20px] left-[20px] z-10 hover:cursor-pointer" id={"id-" + seminar.id} onChange={handleMultiSelect} />
                                 <SeminarCard seminar={!seminar.image_name ? {...seminar, image_name: getImageSourceURL()} : seminar} handleSeminarSelection={handleSeminarSelection} />
                             </div>
                         );

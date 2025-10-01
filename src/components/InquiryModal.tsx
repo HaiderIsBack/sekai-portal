@@ -60,6 +60,16 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, setSelectedSeminar, ha
         fetchSeminars();
     }, [selectedSeminarIds]);
 
+    const handleTabClose = (selectedSeminar: SeminarInfo) => {
+        handleRemoveId(selectedSeminar.id); 
+        selectedSeminarIds = selectedSeminarIds?.filter(i => i !== selectedSeminar.id); selectedSeminarIds && selectedSeminarIds?.length === 0 ? setIsVisible(false) : null;
+
+        const checkboxEl = document.getElementById(`id-${selectedSeminar.id}`);
+        if (checkboxEl) {
+            (checkboxEl as HTMLInputElement).checked = false;
+        }
+    }
+
     const handleFormSubmition: FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
 
@@ -133,7 +143,6 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, setSelectedSeminar, ha
     <>
         <div className="bg-gray-950/30 fixed top-0 left-0 w-full h-full z-20" onClick={() => {
             setIsVisible(false); 
-            setSelectedSeminars([]);
             setSelectedSeminar(null);
             if (setIsGeneralUse)
             setIsGeneralUse(false);
@@ -141,7 +150,7 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, setSelectedSeminar, ha
         <div className="fixed top-1/2 left-1/2 -translate-1/2 w-full max-w-[940px] max-h-[80vh]  overflow-y-auto bg-white rounded-[10px] p-5 pt-0 z-30">
             <div className="sticky top-0 bg-white flex justify-between items-center border-b-[1px] border-[#ddd] pt-[20px] pb-[12px] mb-[12px]">
                 <h2 className="text-2xl font-bold">登壇・共催のご相談</h2>
-                <span className="text-[38px] text-[#666] hover:text-red-500 hover:cursor-pointer" onClick={() => {setIsVisible(false); setSelectedSeminars([]); setSelectedSeminar(null); if(setIsGeneralUse) {setIsGeneralUse(false)}}}>&times;</span>
+                <span className="text-[38px] text-[#666] hover:text-red-500 hover:cursor-pointer" onClick={() => {setIsVisible(false); setSelectedSeminar(null); if(setIsGeneralUse) {setIsGeneralUse(false)}}}>&times;</span>
             </div>
 
             {successModalVisible && <SuccessMessage setIsVisible={setIsVisible} />}
@@ -162,9 +171,9 @@ const InquiryModal = ({ setIsVisible, selectedSeminarIds, setSelectedSeminar, ha
                         selectedSeminars.map(selectedSeminar => (
                             <div key={selectedSeminar.id} className="flex justify-between items-center flex-nowrap text-[16px] py-[10px] px-[15px] bg-[#f9fafb] border-[1px] border-[#e5e7eb] rounded-[8px] my-2.5">
                                 <p className="flex flex-wrap items-center gap-2">
-                                    <strong><Image src={"/images/pin.png"} alt="Pin Icon" width={18} height={18} className="inline-block mr-2" /> {selectedSeminar.title}</strong> (<Image src={"/images/flag.png"} alt="Flag Icon" width={18} height={18} /> {selectedSeminar.country}・{FormattedDate(selectedSeminar.date)})
+                                    <strong><Image src={"/images/pin.png"} alt="Pin Icon" width={18} height={18} className="inline-block mr-2" /> {selectedSeminar.title}</strong> <span>( <Image src={"/images/flag.png"} alt="Flag Icon" width={18} height={18} className="inline-block" /> {selectedSeminar.country}・{FormattedDate(selectedSeminar.date)} )</span>
                                 </p>
-                                <span className="text-[26px] text-[#9CA3AF] hover:text-red-500 hover:cursor-pointer" onClick={() => {handleRemoveId(selectedSeminar.id); selectedSeminarIds = selectedSeminarIds?.filter(i => i !== selectedSeminar.id); selectedSeminarIds && selectedSeminarIds?.length === 0 ? setIsVisible(false) : null;}}>&times;</span>
+                                <span className="text-[26px] text-[#9CA3AF] hover:text-red-500 hover:cursor-pointer" onClick={() => handleTabClose(selectedSeminar)}>&times;</span>
                             </div>
                         ))
                     )
