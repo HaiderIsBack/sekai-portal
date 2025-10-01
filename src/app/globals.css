@@ -34,7 +34,7 @@ body {
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
   overflow: hidden;
-  height: 2.9em;
+  height: 2.5em;
 }
 
 @media (width >= 1520px) {
