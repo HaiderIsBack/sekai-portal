@@ -76,7 +76,7 @@ export default function Home() {
       {showAdminPanel && <AdminModal setIsVisible={setShowAdminPanel} />}
 
       <section className="max-w-[1500px] mx-auto w-full flex flex-col justify-center items-center gap-5 py-[60px] px-[20px]">
-        <h2 className="text-[20px] md:text-[32px] sm:text-[24px] font-bold mt-[26px]"><span className={notoColorEmoji.className}>🌏</span>世界を動かそう</h2>
+        <h2 className="text-[20px] md:text-[32px] sm:text-[24px] font-bold mt-[26px]"><Image src={"/images/globe.png"} alt="Globe Icon" width={128} height={128} className="inline-block w-[26px] md:w-[46px] sm:w-[34px] -mt-[3px]" /> 世界を動かそう</h2>
         <p className="text-[16px] sm:text-[18px] text-center">海外セミナーで登壇・共催し、新しい顧客とつながろう</p>
         <div className="w-full sm:w-fit flex items-center flex-col sm:flex-row gap-4 my-3">
           <Button type='primary' href='/seminars' className="w-full flex-1 sm:flex-auto sm:w-fit text-center sm:text-left">セミナーを探す</Button>
