@@ -119,18 +119,7 @@ export default function Seminars() {
         return () => {
             window.removeEventListener('scroll', handleScroll);
         }
-    }, []);
-
-    // useEffect(() => {
-    //     if (!inquiryModalVisible) {
-    //         setSelectedSeminarIds([]);
-    //         const inputCheckboxes = document.querySelectorAll("input[type='checkbox']");
-
-    //         inputCheckboxes.forEach(e => {
-    //             (e as HTMLInputElement).checked = false;
-    //         });
-    //     }
-    // }, [inquiryModalVisible]);
+    }, [noMoreSeminars, loading]);
 
     const handleSeminarSelection = (seminar: Seminar) => {
         setSelectedSeminar(seminar);
@@ -143,41 +132,35 @@ export default function Seminars() {
     }
 
     const clearFilters = () => {
-        if (searchText === '' && selectedCountry === '' && selectedCategory === '' && selectedMonth === '') return;
-
         loadedCountRef.current = 0;
-
         setSearchText('');
         setSelectedCountry('');
         setSelectedCategory('');
         setSelectedMonth('');
+        fetchSeminars(0);
     }
 
     const handleSearchTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         loadedCountRef.current = 0;
         setSeminars([]);
-        setSelectedSeminarIds([]);
         setSearchText(e.target.value);
     }
 
     const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         loadedCountRef.current = 0;
         setSeminars([]);
-        setSelectedSeminarIds([]);
         setSelectedCountry(e.target.value);
     }
 
     const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         loadedCountRef.current = 0;
         setSeminars([]);
-        setSelectedSeminarIds([]);
         setSelectedCategory(e.target.value);
     }
 
     const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         loadedCountRef.current = 0;
         setSeminars([]);
-        setSelectedSeminarIds([]);
         setSelectedMonth(e.target.value);
     }
 
@@ -212,7 +195,7 @@ export default function Seminars() {
             );
         }
 
-        return <SeminarCardsList seminars={seminars} handleMultiSelect={handleMultiSelect} handleSeminarSelection={handleSeminarSelection} />
+        return <SeminarCardsList seminars={seminars} selectedSeminarsIds={selectedSeminarIds} handleMultiSelect={handleMultiSelect} handleSeminarSelection={handleSeminarSelection} />
     }, [seminars]);
 
     return (
@@ -257,11 +240,12 @@ export default function Seminars() {
 
 type SeminarCardsListProps = {
     seminars: Seminar[];
+    selectedSeminarsIds: number[];
     handleMultiSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleSeminarSelection: (seminar: Seminar) => void;
 }
 
-const SeminarCardsList = ({ seminars, handleMultiSelect, handleSeminarSelection }: SeminarCardsListProps) => {
+const SeminarCardsList = ({ seminars, selectedSeminarsIds, handleMultiSelect, handleSeminarSelection }: SeminarCardsListProps) => {
     const { getImageSourceURL } = useAppContext();
     return (
         <section className="seminars-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-8">
@@ -270,7 +254,7 @@ const SeminarCardsList = ({ seminars, handleMultiSelect, handleSeminarSelection 
                     seminars.map((seminar, i) => {
                         return (
                             <div className="relative group" key={i + "-" + seminar.id}>
-                                <input type="checkbox" value={seminar.id} className="scale-150 duration-300 group-hover:-translate-y-1 absolute top-[20px] left-[20px] z-10 hover:cursor-pointer" id={"id-" + seminar.id} onChange={handleMultiSelect} />
+                                <input type="checkbox" value={seminar.id} className="scale-150 duration-300 group-hover:-translate-y-1 absolute top-[20px] left-[20px] z-10 hover:cursor-pointer" id={"id-" + seminar.id} onChange={handleMultiSelect} defaultChecked={selectedSeminarsIds.includes(seminar.id)} />
                                 <SeminarCard seminar={!seminar.image_name ? {...seminar, image_name: getImageSourceURL()} : seminar} handleSeminarSelection={handleSeminarSelection} />
                             </div>
                         );
