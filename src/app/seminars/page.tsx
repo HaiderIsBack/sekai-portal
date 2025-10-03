@@ -132,6 +132,9 @@ export default function Seminars() {
     }
 
     const clearFilters = () => {
+        if (!searchText && !selectedCountry && !selectedCategory && !selectedMonth) return;
+        setNoMoreSeminars(false);
+        setSeminars([]);
         loadedCountRef.current = 0;
         setSearchText('');
         setSelectedCountry('');
